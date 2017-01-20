@@ -1,17 +1,42 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <hello></hello>
+    <smart-grid :data="data">
+      <smart-grid-column label="姓名" code="name">
+        <template scope="props">
+          <div>{{props.row.name}}</div>
+          <div>{{props.label}}</div>
+          <div>{{title}}</div>
+        </tempate>
+      </smart-grid-column>
+      <smart-grid-column label="性别" code="sex">
+        
+      </smart-grid-column>
+    </smart-grid>
   </div>
 </template>
 
 <script>
-import Hello from './components/Hello'
-
 export default {
   name: 'app',
-  components: {
-    Hello
+  data() {
+    return {
+      title: 'ABC',
+      data: [
+        {
+          name: '张三',
+          sex: '男'
+        },
+        {
+          name: '李四',
+          sex: '女'
+        }
+      ]
+    }
+  },
+  created() {
+    // setTimeout(() => {
+    //   this.title = '11'
+    // }, 5000)
   }
 }
 </script>
