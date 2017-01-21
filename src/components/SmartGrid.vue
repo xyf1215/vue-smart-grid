@@ -12,19 +12,26 @@
       <tbody>
         <tr v-for="row in innerData">
           <td v-for="cell in row.cells">
-            <smart-grid-cell ref="cell" :row-data="row.rowData" :code="cell.code" :label="cell.label" :default-slot-fn="cell.defaultSlotFn"></smart-grid-cell>
+            <smart-grid-cell :row-data="row.rowData" :code="cell.code" :label="cell.label" :default-slot-fn="cell.defaultSlotFn"></smart-grid-cell>
           </td>
         </tr>
       </tbody>
     </table>
+    <smart-grid-pagination v-if="pageable"></smart-grid-pagination>
   </div>
 </template>
 
 <script>
 import SmartGridCell from './SmartGridCell'
+import SmartGridPagination from './SmartGridPagination'
+
 export default {
   props: {
-    data: [Object, Array]
+    data: [Object, Array],
+    pageable: {
+      type: Boolean,
+      default: true
+    }
   },
   data() {
     return {
@@ -41,17 +48,7 @@ export default {
         this.innerData = this.data.map(row => {
           return {
             rowData: row,
-            cells: Object.keys(row).map(code => {
-              const header = this.headers[code]
-              const cell = {
-                code,
-                label: header.label
-              }
-              if (header && header.scopedSlots.default) {
-                cell.defaultSlotFn = header.scopedSlots.default
-              }
-              return cell
-            })
+            cells: Object.keys(row).map(code => this.headers[code])
           }
         })
       }
@@ -61,19 +58,24 @@ export default {
       this.headers[code] = {
         code,
         label,
-        scopedSlots: header.$scopedSlots
+        defaultSlotFn: header.$scopedSlots ? header.$scopedSlots.default : null
       }
     }
   },
   components: {
-    SmartGridCell
+    SmartGridCell,
+    SmartGridPagination
   }
 }
 </script>
 
 <style lang="less" scoped>
 .hidden {
-  // display: none;
-  // visibility: hidden;
+  display: none;
+  visibility: hidden;
+}
+
+table {
+  width: 100%;
 }
 </style>

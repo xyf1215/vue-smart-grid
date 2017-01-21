@@ -8,9 +8,7 @@
           <div>{{title}}</div>
         </tempate>
       </smart-grid-column>
-      <smart-grid-column label="性别" code="sex">
-        
-      </smart-grid-column>
+      <smart-grid-column label="性别" code="sex"></smart-grid-column>
     </smart-grid>
   </div>
 </template>
