@@ -43,6 +43,11 @@ export default {
       console.log(row, select)
     }
   },
+  watch: {
+    'data.number'(val) {
+      console.log(val)
+    }
+  },
   created() {
     setTimeout(() => {
       // this.data = [

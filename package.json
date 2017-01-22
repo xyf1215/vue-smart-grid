@@ -1,9 +1,9 @@
 {
   "name": "vue-smart-grid",
   "version": "1.0.0",
+  "main": "dist/js/app.js",
   "description": "A Vue.js project",
   "author": "xyf1215 <yunfeng.xi@qq.com>",
-  "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",

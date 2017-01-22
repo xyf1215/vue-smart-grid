@@ -109,6 +109,7 @@ export default {
       this.innerData.forEach(item => {
         item.$checked = checked
       })
+      this.data.number = new Date().getTime()
       this.$emit('all-select', checked)
     },
     handleRowCheck(row, only = false) {
