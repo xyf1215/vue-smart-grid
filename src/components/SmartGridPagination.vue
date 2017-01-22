@@ -67,7 +67,6 @@ export default {
         this.pages.push(startPage)
         startPage++
       }
-      this.$emit('page-change', 1)
     }
   }
 }

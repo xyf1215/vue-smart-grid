@@ -14,11 +14,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in innerData">
+        <tr v-for="row in innerData" @click="handleRowCheck(row, true)" :class="{checked: row.$checked}">
           <td v-if="selectable && multiple" style="width: 20px">
-            <label class="grid-checkbox"><span class="checkbox-wrap" :class="{checked: row.$checked}" @click="handleRowCheck(row)"></span></label>
+            <label class="grid-checkbox"><span class="checkbox-wrap" :class="{checked: row.$checked}" @click.stop="handleRowCheck(row)"></span></label>
           </td>
-          <td v-if="cell" v-for="cell in row.cells">
+          <td v-if="cell" v-for="cell in row.cells" :style="cell.style">
             <smart-grid-cell :row-data="row.rowData" :code="cell.code" :label="cell.label" :default-slot-fn="cell.defaultSlotFn"></smart-grid-cell>
           </td>
         </tr>
@@ -111,7 +111,12 @@ export default {
       })
       this.$emit('all-select', checked)
     },
-    handleRowCheck(row) {
+    handleRowCheck(row, only = false) {
+      if (only) {
+        this.innerData.forEach(item => {
+          item.$checked = false
+        })
+      }
       row.$checked = !row.$checked
       this.$emit('select', row.rowData, row.$checked)
     },
@@ -143,9 +148,21 @@ export default {
       this.headers[code] = {
         code,
         label,
+        style: this.extractHeaderStyle(header),
         defaultSlotFn: header.$scopedSlots ? header.$scopedSlots.default : null
       }
       this.cellSize ++
+    },
+    extractHeaderStyle(header) {
+      const {width, align} = header
+      const style = {}
+      if (width) {
+        style.width = width
+      }
+      if (align) {
+        style.textAlign = align
+      }
+      return style
     },
     calcExpandCellSize() {
       if (this.selectable && this.multiple) {

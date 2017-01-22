@@ -8,17 +8,15 @@ export let config = {
   totalElements: 'totalElements',
   number: 'number'
 }
-
-export default {
-  install(Vue, options) {
-    Vue.mixin({
-      components: {
-        'smart-grid': SmartGrid,
-        'smart-grid-column': SmartGridColumn
-      }
-    })
-    if (options) {
-      config = Object.assign({}, config, options)
+SmartGrid.install = function(Vue, options) {
+  Vue.mixin({
+    components: {
+      'smart-grid': SmartGrid,
+      'smart-grid-column': SmartGridColumn
     }
+  })
+  if (options) {
+    config = Object.assign({}, config, options)
   }
 }
+export default SmartGrid

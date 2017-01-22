@@ -1,6 +1,6 @@
 <template>
 <div id="app">
-  <smart-grid :data="data" :loading="loading"
+  <smart-grid :data="data" :loading="loading" :multiple="true"
   @size-change="handleSizeChange"
   @page-change="handlePageChange"
   @all-select="handleAllSelect"
@@ -13,7 +13,7 @@
           <span>{{title}}</span>
         </tempate>
       </smart-grid-column>
-      <smart-grid-column label="性别" code="sex"></smart-grid-column>
+      <smart-grid-column label="性别" code="sex" width="120px" align="right"></smart-grid-column>
       <div slot="empty">没有数据...</div>
     </smart-grid>
   </div>
