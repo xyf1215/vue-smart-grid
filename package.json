@@ -10,7 +10,6 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
-    "classnames": "^2.2.5",
     "normalize.css": "^5.0.0",
     "vue": "^2.1.0",
     "babel-helper-vue-jsx-merge-props": "^2.0.2"

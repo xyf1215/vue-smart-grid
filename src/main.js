@@ -4,7 +4,7 @@ import Vue from 'vue'
 import SmartGrid from './components'
 import App from './App'
 
-Vue.use(SmartGrid)
+Vue.use(SmartGrid, {dataNode: 'content'})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -21,14 +21,9 @@ export default {
     }
   },
   render(h) {
-    const cell = this.renderCell(h)
     return (
-      <div>{cell}</div>
+      <div>{this.renderCell(h)}</div>
     )
   }
 }
 </script>
-
-<style lang="less" scoped>
-
-</style>
