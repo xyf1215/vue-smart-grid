@@ -1,6 +1,6 @@
 {
   "name": "vue-smart-grid",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "main": "dist/bundle.js",
   "description": "基于Vue2开发的表格组件",
   "author": "xyf1215 <yunfeng.xi@qq.com>",
@@ -10,9 +10,12 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/xyf1215/vue-smart-grid"
+  },
   "dependencies": {
     "vue": "^2.1.0",
     "babel-helper-vue-jsx-merge-props": "^2.0.2"
