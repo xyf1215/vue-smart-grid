@@ -18,7 +18,6 @@
 
 <script>
 export default {
-  name: 'app',
   data() {
     return {
       title: 'ABC',
@@ -63,56 +62,8 @@ export default {
       console.log(row, select)
     }
   },
-  watch: {
-    // 'data.size'(size, oldSize) {
-    //   console.log('watch-' + size, oldSize)
-    // },
-    // 'data.number'(number) {
-    //   this.data = {
-    //     content: [
-    //       {
-    //         name: '张三',
-    //         sex: '男',
-    //         age: 33
-    //       },
-    //       {
-    //         name: '李四',
-    //         sex: '女',
-    //         age: 23
-    //       },
-    //       {
-    //         name: '王五',
-    //         sex: '女',
-    //         age: 17
-    //       }
-    //     ],
-    //     size: 10,
-    //     totalPages: 11,
-    //     totalElements: 108,
-    //     number
-    //   }
-    //   console.log('watch-' + number)
-    // }
-  },
   created() {
     setTimeout(() => {
-      // this.data = [
-      //   {
-      //     name: '张三',
-      //     sex: '男',
-      //     age: 33
-      //   },
-      //   {
-      //     name: '李四',
-      //     sex: '女',
-      //     age: 23
-      //   },
-      //   {
-      //     name: '王五',
-      //     sex: '女',
-      //     age: 17
-      //   }
-      // ]
       this.data = {
         content: [
           {
@@ -141,14 +92,3 @@ export default {
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /*text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;*/
-}
-</style>
