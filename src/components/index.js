@@ -1,22 +1,25 @@
-import SmartGrid from './SmartGrid.vue'
-import SmartGridColumn from './SmartGridColumn.vue'
+import SmartGrid from './SmartGrid'
+import SmartGridColumn from './SmartGridColumn'
 
 export let config = {
   dataNode: 'content',
-  pageSize: 'pageSize',
+  size: 'size',
   totalPages: 'totalPages',
   totalElements: 'totalElements',
   number: 'number'
 }
-SmartGrid.install = function(Vue, options) {
-  Vue.mixin({
-    components: {
-      'smart-grid': SmartGrid,
-      'smart-grid-column': SmartGridColumn
-    }
-  })
+
+const install = function(Vue, options) {
+  if (install.installed) {
+    return
+  }
+  Vue.component('smart-grid', SmartGrid)
+  Vue.component('smart-grid-column', SmartGridColumn)
   if (options) {
     config = Object.assign({}, config, options)
   }
 }
-export default SmartGrid
+
+export default {
+  install
+}

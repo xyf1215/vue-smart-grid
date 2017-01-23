@@ -7,7 +7,7 @@
     <table>
       <thead v-if="!hiddenColumn">
         <tr>
-          <th v-if="selectable && multiple" style="width: 30px">
+          <th v-if="selectable && multiple" class="checkbox-row">
             <label class="grid-checkbox"><span class="checkbox-wrap" :class="{checked: allChecked}" @click="handleAllCheck"></span></label>
           </th>
           <th v-for="header in headers">{{header.label}}</th>
@@ -15,7 +15,7 @@
       </thead>
       <tbody>
         <tr v-for="row in innerData" @click="handleRowCheck(row, true)" :class="{checked: row.$checked}">
-          <td v-if="selectable && multiple" style="width: 20px">
+          <td v-if="selectable && multiple" class="checkbox-row">
             <label class="grid-checkbox"><span class="checkbox-wrap" :class="{checked: row.$checked}" @click.stop="handleRowCheck(row)"></span></label>
           </td>
           <td v-if="cell" v-for="cell in row.cells" :style="cell.style">
@@ -27,26 +27,22 @@
         </tr>
       </tbody>
     </table>
-    <smart-grid-pagination v-if="pageable" :page-size="pageSize" :total-pages="totalPages" :total-elements="totalElements" :number="number"
-    @size-change="size => {$emit('size-change', size)}"
-    @page-change="page => {$emit('page-change', page)}">
+    <smart-grid-pagination v-if="pageable" :pagination="data"
+      @size-change="size => {$emit('size-change', size)}"
+      @page-change="page => {$emit('page-change', page)}">
     </smart-grid-pagination>
   </div>
 </template>
 
 <script>
 import '../assets/styles/main.less'
-import {isEmptyObject} from 'libs/lang'
+import {isEmptyObject, isObject} from 'libs/lang'
 import {config} from './index'
 import SmartGridCell from './SmartGridCell'
 import SmartGridPagination from './SmartGridPagination'
 export default {
   props: {
     data: [Object, Array],
-    pageable: {
-      type: Boolean,
-      default: true
-    },
     hoverable: {
       type: Boolean,
       default: true
@@ -74,12 +70,9 @@ export default {
   },
   data() {
     return {
-      headers: {},
+      pageable: false,
+      headers: [],
       innerData: [],
-      pageSize: 10,
-      totalPages: 0,
-      totalElements: 0,
-      number: -1,
       cellSize: 0,
       empty: false
     }
@@ -90,20 +83,39 @@ export default {
     }
   },
   created() {
-    if (!this.data) {
-      return
-    }
-    if (this.pageable && isEmptyObject(this.data)) {
-      return
-    }
-    this.parseData()
+    this.initData()
   },
   watch: {
     data(val) {
-      this.parseData()
+      this.initData()
     }
   },
   methods: {
+    initData() {
+      if (!this.data) {
+        return
+      }
+      if (isObject(this.data) && isEmptyObject(this.data)) {
+        return
+      }
+      this.parseData()
+    },
+    parseData() {
+      let innerData = this.data
+      if (isObject(innerData)) {
+        this.pageable = true
+        innerData = innerData[config.dataNode] || []
+      }
+      this.innerData = innerData.map(row => {
+        return {
+          rowData: row,
+          $checked: false,
+          cells: this.headers
+        }
+      })
+      this.empty = !this.innerData.length
+      this.calcExpandCellSize()
+    },
     handleAllCheck() {
       const checked = !this.allChecked
       this.innerData.forEach(item => {
@@ -121,37 +133,14 @@ export default {
       row.$checked = !row.$checked
       this.$emit('select', row.rowData, row.$checked)
     },
-    parseData() {
-      let innerData = this.data
-      if (this.pageable) {
-        this.extraPaginationInfo(innerData)
-        innerData = innerData[config.dataNode] || []
-      }
-      this.innerData = innerData.map(row => {
-        return {
-          rowData: row,
-          $checked: false,
-          cells: Object.keys(row).map(code => this.headers[code])
-        }
-      })
-      this.empty = !this.innerData.length
-      this.calcExpandCellSize()
-    },
-    extraPaginationInfo(innerData = {}) {
-      const {pageSize, totalPages, totalElements, number} = config
-      this.pageSize = innerData[pageSize]
-      this.totalPages = innerData[totalPages]
-      this.totalElements = innerData[totalElements]
-      this.number = innerData[number]
-    },
     addHeader(header) {
       const {label, code} = header
-      this.headers[code] = {
+      this.headers.push({
         code,
         label,
         style: this.extractHeaderStyle(header),
         defaultSlotFn: header.$scopedSlots ? header.$scopedSlots.default : null
-      }
+      })
       this.cellSize ++
     },
     extractHeaderStyle(header) {
@@ -213,6 +202,10 @@ export default {
   }
   th, td {
     padding: 8px 12px;
+    &.checkbox-row {
+      width: 30px;
+      text-align: center;
+    }
   }
   th {
     background-color: #fbfaf7;

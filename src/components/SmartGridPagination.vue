@@ -2,7 +2,7 @@
   <div class="pagination clearfix">
     <div class="pull-left">
       共<span class="total">{{totalElements}}</span>条数据，每页显示
-      <select class="form-control" v-model="size" @change="$emit('size-change', size)">
+      <select class="form-control" v-model="size" @change="handleChangeSize">
         <option value="10">10</option>
         <option value="20">20</option>
         <option value="50">50</option>
@@ -10,63 +10,108 @@
     </div>
     <div v-show="pages.length" class="pull-right">
       <ul class="pages list-unstyled">
-        <li class="prev"><button type="button" :disabled="startPage === number" @click="$emit('page-change', number - 1)">&lt;</button></li>
-        <li v-for="page in pages"><button type="button" :disabled="page === number" :class="{active: page === number}" @click="$emit('page-change', page)">{{page + 1}}</button></li>
-        <li class="next"><button type="button" :disabled="endPage === number" @click="$emit('page-change', number + 1)">&gt;</button></li>
+        <li><button type="button" :disabled="start === number" @click="handleChangeNumber(0)"><strong>|&lt;</strong></button></li>
+        <li><button type="button" :disabled="start === number" @click="handleChangeNumber(number - 1)"><strong>&lt;</strong></button></li>
+        <li v-for="page in pages"><button type="button" :disabled="page === number" :class="{active: page === number}" @click="handleChangeNumber(page)">{{page + 1}}</button></li>
+        <li><button type="button" :disabled="end - 1 === number" @click="handleChangeNumber(number + 1)"><strong>&gt;</strong></button></li>
+        <li><button type="button" :disabled="end - 1 === number" @click="handleChangeNumber(totalPages - 1)"><strong>&gt;|</strong></button></li>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
+import {isEmptyObject, isObject} from 'libs/lang'
+import {config} from './index'
+
 export default {
   props: {
-    pageSize: Number,
-    totalPages: Number,
-    totalElements: Number,
-    number: Number
+    pagination: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
   },
   data() {
     return {
-      size: this.pageSize,
-      startPage: 0,
-      endPage: 0,
-      pages: []
+      start: 0,
+      end: 0,
+      pages: [],
+      size: 0,
+      totalPages: 0,
+      totalElements: 0,
+      number: 0
     }
   },
   mounted() {
-    this.calcShowpPages()
+    this.initData()
   },
   watch: {
-    number() {
-      this.calcShowpPages()
+    pagination() {
+      this.initData()
     }
   },
   methods: {
-    calcShowpPages() {
-      let showPages = 10
-      let startPage = 0
-      let endPage = this.totalPages
-      if (this.totalPages > showPages) {
-        startPage = endPage = this.number
-        showPages--
-        while (showPages) {
-          if (showPages && startPage !== 0) {
-            startPage--
-            showPages--
-          }
-          if (showPages && endPage !== this.totalPages - 1) {
-            endPage++
-            showPages--
-          }
-        }
+    initData() {
+      if (!this.pagination) {
+        return
       }
-      this.startPage = startPage
-      this.endPage = endPage
-      while (startPage !== endPage) {
-        this.pages.push(startPage)
-        startPage++
+      if (isObject(this.pagination) && isEmptyObject(this.pagination)) {
+        return
       }
+      this.parseData()
+      this.calcShowPages()
+    },
+    parseData() {
+      const {size, totalPages, totalElements, number} = config
+      this.size = this.pagination[size]
+      this.totalPages = this.pagination[totalPages]
+      this.totalElements = this.pagination[totalElements]
+      this.number = this.pagination[number]
+    },
+    calcShowPages() {
+      this.pages = []
+      let start = 0
+      let end = this.totalPages
+      // let showPages = 10
+      // if (this.totalPages > showPages) {
+      //   start = this.number
+      //   end = start + 1
+      //   showPages--
+      //   while (showPages) {
+      //     console.log(showPages)
+      //     if (showPages && end !== this.totalPages - 1) {
+      //       end++
+      //       showPages--
+      //     }
+      //     if (showPages && start !== 0) {
+      //       start--
+      //       showPages--
+      //     }
+      //   }
+      // }
+      this.start = start
+      this.end = end
+      while (start !== end) {
+        this.pages.push(start)
+        start++
+      }
+    },
+    handleChangeSize() {
+      const newSize = parseInt(this.size, 10)
+      // const {size} = config
+      this.size = newSize
+      // this.pagination[size] = newSize
+      this.$emit('size-change', newSize)
+      this.calcShowPages()
+    },
+    handleChangeNumber(newNumber) {
+      // const {number} = config
+      this.number = newNumber
+      // this.pagination[number] = newNumber
+      this.$emit('page-change', newNumber)
+      this.calcShowPages()
     }
   }
 }
@@ -87,11 +132,6 @@ export default {
   }
   .pages {
     display: inline-block;
-    .prev, .next {
-      button {
-        font-weight: bold;
-      }
-    }
     li {
       display: inline-block;
       margin: 2px;
