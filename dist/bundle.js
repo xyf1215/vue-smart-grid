@@ -737,9 +737,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.$emit('all-select', checked);
 	    },
 	    handleRowCheck: function handleRowCheck(row) {
-	      var only = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	      var onlyChecked = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 	
-	      if (only) {
+	      if (!this.selectable) {
+	        return;
+	      }
+	      if (onlyChecked) {
+	        if (this.multiple) {
+	          return;
+	        }
 	        this.innerData.forEach(function (item) {
 	          item.$checked = false;
 	        });

@@ -124,8 +124,14 @@ export default {
       this.data.number = new Date().getTime()
       this.$emit('all-select', checked)
     },
-    handleRowCheck(row, only = false) {
-      if (only) {
+    handleRowCheck(row, onlyChecked = false) {
+      if (!this.selectable) {
+        return
+      }
+      if (onlyChecked) {
+        if (this.multiple) {
+          return
+        }
         this.innerData.forEach(item => {
           item.$checked = false
         })
