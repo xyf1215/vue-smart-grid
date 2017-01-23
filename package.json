@@ -1,6 +1,6 @@
 {
   "name": "vue-smart-grid",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "main": "dist/bundle.js",
   "description": "A Vue.js project",
   "author": "xyf1215 <yunfeng.xi@qq.com>",

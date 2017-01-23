@@ -2,6 +2,9 @@
 
 > 基于Vue>=2.1开发的表格组件
 
+可直接编译运行
+[github](https://github.com/xyf1215/vue-smart-grid "Title")
+
 ## 使用
 ``````
 import VueSmartGrid from 'vue-smart-grid'
