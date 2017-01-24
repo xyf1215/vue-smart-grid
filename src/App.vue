@@ -50,7 +50,7 @@ export default {
           }
         ],
         size: 10,
-        totalPages: 11,
+        totalPages: 15,
         totalElements: 108,
         number: page
       }
@@ -83,7 +83,7 @@ export default {
           }
         ],
         size: 10,
-        totalPages: 11,
+        totalPages: 15,
         totalElements: 108,
         number: 0
       }

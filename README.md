@@ -2,7 +2,7 @@
 
 > 基于Vue2开发的表格组件
 
-可直接编译运行
+可基于源码二次开发
 [github](https://github.com/xyf1215/vue-smart-grid)
 
 ## 使用
@@ -10,14 +10,14 @@
 import VueSmartGrid from 'vue-smart-grid'
 Vue.use(VueSmartGrid)
 ``````
-默认基于spring-data的分页参数，可以在install时传入option自定义
+默认基于spring-data的分页参数，可以在install时传入options自定义
 ``````
 Vue.use(VueSmartGrid, {
-  dataNode: 'content',
-  size: 'size',
-  totalPages: 'totalPages',
-  totalElements: 'totalElements',
-  number: 'number'
+  dataNode: 'content', // 分页时的存放数据数组的名称
+  size: 'size', // 每页显示多少条数据 默认10，20，50
+  totalPages: 'totalPages', // 总页数
+  totalElements: 'totalElements', // 总数量
+  number: 'number' // 当前第几页，从0开始
 })
 ``````
 ## 例子
@@ -32,7 +32,6 @@ Vue.use(VueSmartGrid, {
             <span>{{props.row.name}}</span>
             <span>{{props.row.sex}}</span>
             <span>{{props.row.age}}</span>
-            <span>{{title}}</span>
           </tempate>
       </smart-grid-column>
       <div slot="empty">没有数据...</div>
@@ -44,7 +43,6 @@ Vue.use(VueSmartGrid, {
 export default {
   data() {
     return {
-      title: 'ABC',
       loading: true,
       data: {}
     }
@@ -159,6 +157,19 @@ x与y同理
 
 ### hiddenColumn
 是否隐藏表头，默认为false
+
+## 事件
+### size-change
+改变条数时会出发
+
+### page-change
+改变页数时会出发
+
+### select
+选中、取消选中是会触发
+
+### all-select
+选中、取消全选时会触发
 
 ## Smart-grid-column API
 ### label

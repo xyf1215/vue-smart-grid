@@ -27,10 +27,7 @@
         </tr>
       </tbody>
     </table>
-    <smart-grid-pagination v-if="pageable" :pagination="data"
-      @size-change="size => {$emit('size-change', size)}"
-      @page-change="page => {$emit('page-change', page)}">
-    </smart-grid-pagination>
+    <smart-grid-pagination v-if="pageable" :pagination="data" @size-change="size => {$emit('size-change', size)}" @page-change="page => {$emit('page-change', page)}"></smart-grid-pagination>
   </div>
 </template>
 
@@ -121,7 +118,6 @@ export default {
       this.innerData.forEach(item => {
         item.$checked = checked
       })
-      this.data.number = new Date().getTime()
       this.$emit('all-select', checked)
     },
     handleRowCheck(row, onlyChecked = false) {

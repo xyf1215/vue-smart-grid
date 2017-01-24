@@ -23,7 +23,6 @@
 <script>
 import {isEmptyObject, isObject} from 'libs/lang'
 import {config} from './index'
-
 export default {
   props: {
     pagination: {
@@ -47,11 +46,6 @@ export default {
   mounted() {
     this.initData()
   },
-  watch: {
-    pagination() {
-      this.initData()
-    }
-  },
   methods: {
     initData() {
       if (!this.pagination) {
@@ -72,44 +66,45 @@ export default {
     },
     calcShowPages() {
       this.pages = []
+      let showPages = 10
       let start = 0
       let end = this.totalPages
-      // let showPages = 10
-      // if (this.totalPages > showPages) {
-      //   start = this.number
-      //   end = start + 1
-      //   showPages--
-      //   while (showPages) {
-      //     console.log(showPages)
-      //     if (showPages && end !== this.totalPages - 1) {
-      //       end++
-      //       showPages--
-      //     }
-      //     if (showPages && start !== 0) {
-      //       start--
-      //       showPages--
-      //     }
-      //   }
-      // }
+      if (showPages < this.totalPages) {
+        start = end = this.number
+        let isCalcStart = true
+        while (showPages) {
+          if (isCalcStart) {
+            if (start) {
+              start--
+            } else {
+              end++
+            }
+          } else {
+            if (end < this.totalPages) {
+              end++
+            } else {
+              start--
+            }
+          }
+          isCalcStart = !isCalcStart
+          showPages--
+        }
+      }
       this.start = start
       this.end = end
-      while (start !== end) {
+      while (start < end) {
         this.pages.push(start)
         start++
       }
     },
     handleChangeSize() {
       const newSize = parseInt(this.size, 10)
-      // const {size} = config
       this.size = newSize
-      // this.pagination[size] = newSize
       this.$emit('size-change', newSize)
       this.calcShowPages()
     },
     handleChangeNumber(newNumber) {
-      // const {number} = config
       this.number = newNumber
-      // this.pagination[number] = newNumber
       this.$emit('page-change', newNumber)
       this.calcShowPages()
     }
@@ -150,7 +145,7 @@ export default {
         color: #666;
         transition: all .3s;
         &[disabled] {
-          opacity: .8;
+          opacity: .6;
           cursor: not-allowed;
         }
         &:hover:not([disabled]) {
