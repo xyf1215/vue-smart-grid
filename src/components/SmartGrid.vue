@@ -27,7 +27,7 @@
         </tr>
       </tbody>
     </table>
-    <smart-grid-pagination v-if="pageable" :pagination="data" @size-change="size => {$emit('size-change', size)}" @page-change="page => {$emit('page-change', page)}"></smart-grid-pagination>
+    <smart-grid-pagination v-if="pageable" :pagination="data" @size-change="size => {$emit('size-change', size)}" @page-change="page => {$emit('page-change', page)}" @pagination-change="params => {$emit('pagination-change', params)}"></smart-grid-pagination>
   </div>
 </template>
 

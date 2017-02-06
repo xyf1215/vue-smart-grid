@@ -2,7 +2,7 @@
   <div class="pagination clearfix">
     <div class="pull-left">
       共<span class="total">{{totalElements}}</span>条数据，每页显示
-      <select class="form-control" v-model="size" @change="handleChangeSize">
+      <select class="form-control" v-model="size" @change="handleSizeChange">
         <option value="10">10</option>
         <option value="20">20</option>
         <option value="50">50</option>
@@ -10,11 +10,11 @@
     </div>
     <div v-show="pages.length" class="pull-right">
       <ul class="pages list-unstyled">
-        <li><button type="button" :disabled="start === number" @click="handleChangeNumber(0)"><strong>|&lt;</strong></button></li>
-        <li><button type="button" :disabled="start === number" @click="handleChangeNumber(number - 1)"><strong>&lt;</strong></button></li>
-        <li v-for="page in pages"><button type="button" :disabled="page === number" :class="{active: page === number}" @click="handleChangeNumber(page)">{{page + 1}}</button></li>
-        <li><button type="button" :disabled="end - 1 === number" @click="handleChangeNumber(number + 1)"><strong>&gt;</strong></button></li>
-        <li><button type="button" :disabled="end - 1 === number" @click="handleChangeNumber(totalPages - 1)"><strong>&gt;|</strong></button></li>
+        <li><button type="button" :disabled="start === number" @click="handleNumberChange(0)"><strong>|&lt;</strong></button></li>
+        <li><button type="button" :disabled="start === number" @click="handleNumberChange(number - 1)"><strong>&lt;</strong></button></li>
+        <li v-for="page in pages"><button type="button" :disabled="page === number" :class="{active: page === number}" @click="handleNumberChange(page)">{{page + 1}}</button></li>
+        <li><button type="button" :disabled="end - 1 === number" @click="handleNumberChange(number + 1)"><strong>&gt;</strong></button></li>
+        <li><button type="button" :disabled="end - 1 === number" @click="handleNumberChange(totalPages - 1)"><strong>&gt;|</strong></button></li>
       </ul>
     </div>
   </div>
@@ -97,15 +97,20 @@ export default {
         start++
       }
     },
-    handleChangeSize() {
+    handleSizeChange() {
       const newSize = parseInt(this.size, 10)
       this.size = newSize
+      this.number = 0 // size改变后将页数重置
       this.$emit('size-change', newSize)
-      this.calcShowPages()
+      this.handlePaginationChange({size: newSize, number: this.number})
     },
-    handleChangeNumber(newNumber) {
+    handleNumberChange(newNumber) {
       this.number = newNumber
       this.$emit('page-change', newNumber)
+      this.handlePaginationChange({size: this.size, number: newNumber})
+    },
+    handlePaginationChange(params) {
+      this.$emit('pagination-change', params)
       this.calcShowPages()
     }
   }

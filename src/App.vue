@@ -1,6 +1,6 @@
 <template>
 <div id="app">
-  <smart-grid :data="data" :loading="loading" @size-change="handleSizeChange" @page-change="handlePageChange" @all-select="handleAllSelect" @select="handleSelect">
+  <smart-grid :data="data" :loading="loading" @pagination-change="query" @size-change="handleSizeChange" @page-change="handlePageChange" @all-select="handleAllSelect" @select="handleSelect">
       <smart-grid-column label="性别" code="sex" width="120px" align="right"></smart-grid-column>
       <smart-grid-column label="年龄" code="age" width="120px" align="center"></smart-grid-column>
       <smart-grid-column label="姓名" code="name">
@@ -54,6 +54,9 @@ export default {
         totalElements: 108,
         number: page
       }
+    },
+    query(params) {
+      console.log('query', params)
     },
     handleAllSelect(select) {
       console.log(select)
