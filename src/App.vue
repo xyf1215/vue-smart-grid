@@ -55,8 +55,8 @@ export default {
         number: page
       }
     },
-    query(params) {
-      console.log('query', params)
+    query({size, number}) {
+      console.log('query', size, number)
     },
     handleAllSelect(select) {
       console.log(select)
