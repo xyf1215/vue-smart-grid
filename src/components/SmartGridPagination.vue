@@ -1,8 +1,8 @@
 <template>
   <div class="pagination clearfix">
     <div class="pull-left">
-      共<span class="total">{{pagination[config.totalElements]}}</span>条数据，每页显示
-      <select class="form-control" v-model="pagination[config.size]" @change="handleSizeChange">
+      共<span class="total">{{totalElements}}</span>条数据，每页显示
+      <select class="form-control" v-model="size" @change="handleSizeChange">
         <option value="10">10</option>
         <option value="20">20</option>
         <option value="50">50</option>
@@ -10,11 +10,11 @@
     </div>
     <div v-show="pages.length" class="pull-right">
       <ul class="pages list-unstyled">
-        <li><button type="button" :disabled="start === pagination[config.number]" @click="handleNumberChange(0)"><strong>|&lt;</strong></button></li>
-        <li><button type="button" :disabled="start === pagination[config.number]" @click="handleNumberChange(pagination[config.number] - 1)"><strong>&lt;</strong></button></li>
-        <li v-for="page in pages"><button type="button" :disabled="page === pagination[config.number]" :class="{active: page === pagination[config.number]}" @click="handleNumberChange(page)">{{page + 1}}</button></li>
-        <li><button type="button" :disabled="end - 1 === pagination[config.number]" @click="handleNumberChange(pagination[config.number] + 1)"><strong>&gt;</strong></button></li>
-        <li><button type="button" :disabled="end - 1 === pagination[config.number]" @click="handleNumberChange(pagination[config.totalPages] - 1)"><strong>&gt;|</strong></button></li>
+        <li><button type="button" :disabled="start === number" @click="handleNumberChange(0)"><strong>|&lt;</strong></button></li>
+        <li><button type="button" :disabled="start === number" @click="handleNumberChange(number - 1)"><strong>&lt;</strong></button></li>
+        <li v-for="page in pages"><button type="button" :disabled="page === number" :class="{active: page === number}" @click="handleNumberChange(page)">{{page + 1}}</button></li>
+        <li><button type="button" :disabled="end - 1 === number" @click="handleNumberChange(number + 1)"><strong>&gt;</strong></button></li>
+        <li><button type="button" :disabled="end - 1 === number" @click="handleNumberChange(totalPages - 1)"><strong>&gt;|</strong></button></li>
       </ul>
     </div>
   </div>
@@ -32,12 +32,20 @@ export default {
       }
     }
   },
+  watch: {
+    pagination(val) {
+      this.initData()
+    }
+  },
   data() {
     return {
       start: 0,
       end: 0,
       pages: [],
-      config
+      size: 0,
+      totalPages: 0,
+      totalElements: 0,
+      number: 0
     }
   },
   mounted() {
@@ -51,15 +59,23 @@ export default {
       if (isObject(this.pagination) && isEmptyObject(this.pagination)) {
         return
       }
+      this.parseData()
       this.calcShowPages()
+    },
+    parseData() {
+      const {size, totalPages, totalElements, number} = config
+      this.size = this.pagination[size]
+      this.totalPages = this.pagination[totalPages]
+      this.totalElements = this.pagination[totalElements]
+      this.number = this.pagination[number]
     },
     calcShowPages() {
       this.pages = []
       let showPages = 10
       let start = 0
-      let end = this.pagination[config.totalPages]
-      if (showPages < end) {
-        start = end = this.pagination[config.number]
+      let end = this.totalPages
+      if (showPages < this.totalPages) {
+        start = end = this.number
         let isCalcStart = true
         while (showPages) {
           if (isCalcStart) {
@@ -69,7 +85,7 @@ export default {
               end++
             }
           } else {
-            if (end < this.pagination[config.totalPages]) {
+            if (end < this.totalPages) {
               end++
             } else {
               start--
@@ -87,17 +103,19 @@ export default {
       }
     },
     handleSizeChange() {
-      const newSize = parseInt(this.pagination[config.size], 10)
-      this.pagination[config.size] = newSize
+      const {size, number} = config
+      const newSize = parseInt(this.size, 10)
+      this.size = this.pagination[size] = newSize
       // size改变后将页数重置
-      this.pagination[config.number] = 0
+      this.number = this.pagination[number] = 0
       this.$emit('size-change', newSize)
-      this.handlePaginationChange({size: newSize, number: this.pagination[config.number]})
+      this.handlePaginationChange({size: newSize, number: this.number})
     },
     handleNumberChange(newNumber) {
-      this.pagination[config.number] = newNumber
+      const {number} = config
+      this.number = this.pagination[number] = newNumber
       this.$emit('page-change', newNumber)
-      this.handlePaginationChange({size: this.pagination[config.size], number: newNumber})
+      this.handlePaginationChange({size: this.size, number: newNumber})
     },
     handlePaginationChange(params) {
       this.$emit('pagination-change', params)
