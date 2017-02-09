@@ -14,7 +14,7 @@ export default {
   methods: {
     renderCell(h) {
       if (this.defaultSlotFn) {
-        return this.defaultSlotFn({row: this.rowData})
+        return this.defaultSlotFn({row: Object.assign({}, this.rowData), rawRow: this.rowData})
       } else {
         return (<span>{this.rowData[this.code]}</span>)
       }
