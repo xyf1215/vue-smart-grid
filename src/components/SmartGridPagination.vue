@@ -118,6 +118,10 @@ export default {
       this.handlePaginationChange({size: this.size, number: newNumber})
     },
     handlePaginationChange(params) {
+      // number和page指向一个值 k-lib需要
+      if (typeof params.number !== undefined) {
+        params.page = params.number
+      }
       this.$emit('pagination-change', params)
       this.calcShowPages()
     }
