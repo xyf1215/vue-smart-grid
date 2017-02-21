@@ -1,4 +1,5 @@
 <script>
+import {getObjDeepVal} from 'libs/lang'
 export default {
   props: {
     label: String,
@@ -16,7 +17,8 @@ export default {
       if (this.defaultSlotFn) {
         return this.defaultSlotFn({row: Object.assign({}, this.rowData), rawRow: this.rowData})
       } else {
-        return (<span>{this.rowData[this.code]}</span>)
+        const rowVal = getObjDeepVal(this.rowData, this.code)
+        return (<span>{rowVal}</span>)
       }
     }
   },

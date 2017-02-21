@@ -67,3 +67,19 @@ export const isRegExp = variable => {
 export const isFunction = variable => {
   return getVariableType(variable) === 'Function'
 }
+
+/**
+ * 递归获取对象的值
+ * @param  {Object} obj 对象
+ * @param  {String} key key
+ * @return {String}
+ */
+export const getObjDeepVal = (obj, key) => {
+  if (key.indexOf('.') === -1) {
+    // 最后一层
+    return obj[key]
+  }
+  const keys = key.split('.')
+  const currentKey = keys.splice(0, 1)[0]
+  return getObjDeepVal(obj[currentKey], keys.join('.'))
+}
