@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in innerData" @click="handleRowCheck(row, true)" :class="{checked: row.$checked}">
+        <tr v-for="row in innerData" @click="handleRowCheck(row, true)" :class="{checked: row.$checked}" @dblclick="handleDblClick(row)">
           <td v-if="selectable && multiple" class="checkbox-row">
             <label class="grid-checkbox"><span class="checkbox-wrap" :class="{checked: row.$checked}" @click.stop="handleRowCheck(row)"></span></label>
           </td>
@@ -134,6 +134,9 @@ export default {
       }
       row.$checked = !row.$checked
       this.$emit('select', row.rowData, row.$checked)
+    },
+    handleDblClick(row) {
+      this.$emit('dblclick', row.rowData)
     },
     addHeader(header) {
       const {label, code} = header
