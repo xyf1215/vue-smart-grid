@@ -24,9 +24,10 @@ Vue.use(VueSmartGrid, {
 ``````
 <template>
 <div id="app">
-  <smart-grid :data="data" :loading="loading" @pagination-change="query" @size-change="handleSizeChange" @page-change="handlePageChange" @all-select="handleAllSelect" @select="handleSelect" @dblclick="handleDbClick">
+  <smart-grid :data="data" @reload="reload" :event-hub="eventHub" :loading="loading" @pagination-change="query" @size-change="handleSizeChange" @page-change="handlePageChange" @all-select="handleAllSelect" @select="handleSelect" @dblclick="handleDbClick">
       <smart-grid-column label="性别" code="sex" width="120px" align="right"></smart-grid-column>
       <smart-grid-column label="年龄" code="age" width="120px" align="center"></smart-grid-column>
+      <smart-grid-column label="类型" code="type" :valueset="{1: '牛', 2: '不牛'}" width="120px" align="center"></smart-grid-column>
       <smart-grid-column label="班级" code="clazz.name" width="120px" align="center"></smart-grid-column>
       <smart-grid-column label="姓名" code="name">
         <template scope="props">
@@ -38,59 +39,33 @@ Vue.use(VueSmartGrid, {
       </smart-grid-column>
       <div slot="empty">没有数据...</div>
     </smart-grid>
+    <button type="button" @click="toReload">reload</button>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
 export default {
   data() {
     return {
       title: 'ABC',
       loading: true,
-      data: {}
+      data: {},
+      eventHub: new Vue()
     }
   },
   methods: {
+    toReload() {
+      this.eventHub.$emit('reload')
+    },
+    reload(params) {
+      console.log('reload', params)
+    },
     handleSizeChange(size) {
       console.log(size)
     },
     handlePageChange(page) {
       console.log(page)
-      this.data = {
-        content: [
-          {
-            name: '张三',
-            sex: '男',
-            clazz: {
-              id: 1,
-              name: '三班'
-            },
-            age: Math.random()
-          },
-          {
-            name: '李四',
-            sex: '女',
-            clazz: {
-              id: 2,
-              name: '四班'
-            },
-            age: Math.random()
-          },
-          {
-            name: '王五',
-            sex: '女',
-            clazz: {
-              id: 3,
-              name: '五班'
-            },
-            age: Math.random()
-          }
-        ],
-        size: 10,
-        totalPages: 15,
-        totalElements: 108,
-        number: page
-      }
     },
     query({size, number}) {
       console.log('query', size, number)
@@ -113,6 +88,7 @@ export default {
             name: '张三',
             sex: '男',
             age: 33,
+            type: 1,
             clazz: {
               id: 1,
               name: '三班'
@@ -122,6 +98,7 @@ export default {
             name: '李四',
             sex: '女',
             age: 23,
+            type: 2,
             clazz: {
               id: 2,
               name: '四班'
@@ -131,6 +108,7 @@ export default {
             name: '王五',
             sex: '女',
             age: 17,
+            type: 1,
             clazz: {
               id: 3,
               name: '五班'
@@ -147,6 +125,7 @@ export default {
   }
 }
 </script>
+
 ``````
 
 ## Smart-grid API
@@ -228,3 +207,6 @@ x与y同理
 
 ### align
 对齐方式
+
+### valueset
+代码集对象

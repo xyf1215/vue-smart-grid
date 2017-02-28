@@ -3,6 +3,7 @@
   <smart-grid :data="data" @reload="reload" :event-hub="eventHub" :loading="loading" @pagination-change="query" @size-change="handleSizeChange" @page-change="handlePageChange" @all-select="handleAllSelect" @select="handleSelect" @dblclick="handleDbClick">
       <smart-grid-column label="性别" code="sex" width="120px" align="right"></smart-grid-column>
       <smart-grid-column label="年龄" code="age" width="120px" align="center"></smart-grid-column>
+      <smart-grid-column label="类型" code="type" :valueset="{1: '牛', 2: '不牛'}" width="120px" align="center"></smart-grid-column>
       <smart-grid-column label="班级" code="clazz.name" width="120px" align="center"></smart-grid-column>
       <smart-grid-column label="姓名" code="name">
         <template scope="props">
@@ -41,41 +42,6 @@ export default {
     },
     handlePageChange(page) {
       console.log(page)
-      this.data = {
-        content: [
-          {
-            name: '张三',
-            sex: '男',
-            clazz: {
-              id: 1,
-              name: '三班'
-            },
-            age: Math.random()
-          },
-          {
-            name: '李四',
-            sex: '女',
-            clazz: {
-              id: 2,
-              name: '四班'
-            },
-            age: Math.random()
-          },
-          {
-            name: '王五',
-            sex: '女',
-            clazz: {
-              id: 3,
-              name: '五班'
-            },
-            age: Math.random()
-          }
-        ],
-        size: 10,
-        totalPages: 15,
-        totalElements: 108,
-        number: page
-      }
     },
     query({size, number}) {
       console.log('query', size, number)
@@ -98,6 +64,7 @@ export default {
             name: '张三',
             sex: '男',
             age: 33,
+            type: 1,
             clazz: {
               id: 1,
               name: '三班'
@@ -107,6 +74,7 @@ export default {
             name: '李四',
             sex: '女',
             age: 23,
+            type: 2,
             clazz: {
               id: 2,
               name: '四班'
@@ -116,6 +84,7 @@ export default {
             name: '王五',
             sex: '女',
             age: 17,
+            type: 1,
             clazz: {
               id: 3,
               name: '五班'

@@ -7,7 +7,8 @@ export default {
     label: String,
     code: String,
     width: String,
-    align: String
+    align: String,
+    valueset: Object
   },
   mounted() {
     this.$parent.addHeader(this)

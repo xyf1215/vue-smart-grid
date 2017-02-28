@@ -19,7 +19,7 @@
             <label class="grid-checkbox"><span class="checkbox-wrap" :class="{checked: row.$checked}" @click.stop="handleRowCheck(row)"></span></label>
           </td>
           <td v-if="cell" v-for="cell in row.cells" :style="cell.style">
-            <smart-grid-cell :row-data="row.rowData" :code="cell.code" :label="cell.label" :default-slot-fn="cell.defaultSlotFn"></smart-grid-cell>
+            <smart-grid-cell :row-data="row.rowData" :code="cell.code" :label="cell.label" :valueset="cell.valueset" :default-slot-fn="cell.defaultSlotFn"></smart-grid-cell>
           </td>
         </tr>
         <tr v-if="cellSize && empty">
@@ -152,10 +152,11 @@ export default {
       this.$emit('dblclick', row.rowData)
     },
     addHeader(header) {
-      const {label, code} = header
+      const {label, code, valueset} = header
       this.headers.push({
         code,
         label,
+        valueset,
         style: this.extractHeaderStyle(header),
         defaultSlotFn: header.$scopedSlots ? header.$scopedSlots.default : null
       })

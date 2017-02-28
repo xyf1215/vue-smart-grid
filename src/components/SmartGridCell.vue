@@ -1,5 +1,6 @@
 <script>
-import {getObjDeepVal} from 'libs/lang'
+import {getObjDeepVal, isEmptyObject} from 'libs/lang'
+
 export default {
   props: {
     label: String,
@@ -10,14 +11,27 @@ export default {
         return {}
       }
     },
+    valueset: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
     defaultSlotFn: Function
   },
   methods: {
     renderCell(h) {
       if (this.defaultSlotFn) {
-        return this.defaultSlotFn({row: Object.assign({}, this.rowData), rawRow: this.rowData})
+        return this.defaultSlotFn({
+          row: Object.assign({}, this.rowData),
+          rawRow: this.rowData,
+          valueset: this.valueset
+        })
       } else {
-        const rowVal = getObjDeepVal(this.rowData, this.code)
+        let rowVal = getObjDeepVal(this.rowData, this.code)
+        if (!isEmptyObject(this.valueset)) {
+          rowVal = this.valueset[rowVal]
+        }
         return (<span>{rowVal}</span>)
       }
     }
