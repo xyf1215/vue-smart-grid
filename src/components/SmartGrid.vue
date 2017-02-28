@@ -27,7 +27,14 @@
         </tr>
       </tbody>
     </table>
-    <smart-grid-pagination v-if="pageable" :pagination="data" @size-change="size => {$emit('size-change', size)}" @page-change="page => {$emit('page-change', page)}" @pagination-change="params => {$emit('pagination-change', params)}"></smart-grid-pagination>
+    <smart-grid-pagination v-if="pageable"
+      :pagination="data"
+      :event-hub="eventHub"
+      @size-change="size => {$emit('size-change', size)}"
+      @page-change="page => {$emit('page-change', page)}"
+      @pagination-change="params => {$emit('pagination-change', params)}"
+      @reload="params => {$emit('reload', params)}">
+    </smart-grid-pagination>
   </div>
 </template>
 
@@ -63,6 +70,12 @@ export default {
     hiddenColumn: {
       type: Boolean,
       default: false
+    },
+    eventHub: {
+      type: Object,
+      default() {
+        return {}
+      }
     }
   },
   data() {

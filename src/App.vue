@@ -1,6 +1,6 @@
 <template>
 <div id="app">
-  <smart-grid :data="data" :loading="loading" @pagination-change="query" @size-change="handleSizeChange" @page-change="handlePageChange" @all-select="handleAllSelect" @select="handleSelect" @dblclick="handleDbClick">
+  <smart-grid :data="data" @reload="reload" :event-hub="eventHub" :loading="loading" @pagination-change="query" @size-change="handleSizeChange" @page-change="handlePageChange" @all-select="handleAllSelect" @select="handleSelect" @dblclick="handleDbClick">
       <smart-grid-column label="性别" code="sex" width="120px" align="right"></smart-grid-column>
       <smart-grid-column label="年龄" code="age" width="120px" align="center"></smart-grid-column>
       <smart-grid-column label="班级" code="clazz.name" width="120px" align="center"></smart-grid-column>
@@ -14,19 +14,28 @@
       </smart-grid-column>
       <div slot="empty">没有数据...</div>
     </smart-grid>
+    <button type="button" @click="toReload">reload</button>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
 export default {
   data() {
     return {
       title: 'ABC',
       loading: true,
-      data: {}
+      data: {},
+      eventHub: new Vue()
     }
   },
   methods: {
+    toReload() {
+      this.eventHub.$emit('reload')
+    },
+    reload(params) {
+      console.log('reload', params)
+    },
     handleSizeChange(size) {
       console.log(size)
     },

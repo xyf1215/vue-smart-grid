@@ -30,10 +30,16 @@ export default {
       default() {
         return {}
       }
+    },
+    eventHub: {
+      type: Object,
+      default() {
+        return {}
+      }
     }
   },
   watch: {
-    pagination(val) {
+    pagination() {
       this.initData()
     }
   },
@@ -47,6 +53,9 @@ export default {
       totalElements: 0,
       number: 0
     }
+  },
+  created() {
+    this.eventHub.$on && this.eventHub.$on('reload', this.handleReload)
   },
   mounted() {
     this.initData()
@@ -124,6 +133,17 @@ export default {
       }
       this.$emit('pagination-change', params)
       this.calcShowPages()
+    },
+    handleReload() {
+      // 重新
+      const {size, number} = this
+      const params = {
+        size,
+        number,
+        // number和page指向一个值 k-lib需要
+        page: number
+      }
+      this.$emit('reload', params)
     }
   }
 }

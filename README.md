@@ -180,6 +180,9 @@ data: {
 ### multiple
 是否为多选，默认为true
 
+### eventHub
+触发vue-smart-gird事件时使用
+
 ### border
 表格样式，默认'xy'，可取值：'xy','x','y'
 'xy':x与y都会有边栏
@@ -203,6 +206,9 @@ x与y同理
 
 ### dblclick
 双击行时触发
+
+### reload
+重载（将会带当前的分页信息）
 
 ### select
 选中、取消选中是会触发
