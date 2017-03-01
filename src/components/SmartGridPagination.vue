@@ -3,9 +3,7 @@
     <div class="pull-left">
       共<span class="total">{{totalElements}}</span>条数据，每页显示
       <select class="form-control" v-model="size" @change="handleSizeChange">
-        <option value="10">10</option>
-        <option value="20">20</option>
-        <option value="50">50</option>
+        <option v-for="item in sizes" :value="item">{{item}}</option>
       </select>条记录
     </div>
     <div v-show="pages.length" class="pull-right">
@@ -40,6 +38,12 @@ export default {
     showPages: {
       type: Number,
       default: 10
+    },
+    sizes: {
+      type: Array,
+      default() {
+        return [10, 20, 50]
+      }
     }
   },
   watch: {

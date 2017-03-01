@@ -181,6 +181,9 @@ x与y同理
 ### hidden-column
 是否隐藏表头，默认为false
 
+### sizes
+分页条数，默认"[10, 20, 50, 60]"
+
 ## 事件
 ### size-change
 改变条数时会出发

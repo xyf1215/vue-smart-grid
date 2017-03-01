@@ -3,9 +3,7 @@
     <div class="hidden">
       <slot></slot>
     </div>
-    <div class="layer">
-      <i class="iconfont icon-loading"></i>
-    </div>
+    <div class="layer"></div>
     <table>
       <thead v-if="!hiddenColumn">
         <tr>
@@ -47,6 +45,7 @@
       :pagination="data"
       :event-hub="eventHub"
       :show-pages="showPages"
+      :sizes="sizes"
       @size-change="size => {$emit('size-change', size)}"
       @page-change="page => {$emit('page-change', page)}"
       @pagination-change="params => {$emit('pagination-change', params)}"
@@ -93,6 +92,9 @@ export default {
     },
     eventHub: {
       type: Object
+    },
+    sizes: {
+      type: Array
     }
   },
   data() {
@@ -277,31 +279,10 @@ export default {
     left: 0;
     bottom: 0;
     right: 0;
-    background-color: rgba(192, 192, 192, .5);
+    background: url(../assets/images/loading.gif) no-repeat center center rgba(192, 192, 192, .5);
     z-index: -1;
     opacity: 0;
     text-align: center;
-    .iconfont {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-12px);
-      animation: rotating 1s linear infinite;
-      font-size: 24px;
-      display: inline-block;
-      text-align: center;
-      height: 24px;
-      width: 24px;
-      color: #333;
-      line-height: 24px;
-    }
-    @keyframes rotating {
-      0%, 100% {
-        transform: translateY(-12px) rotate(0deg);
-      }
-      100% {
-        transform: translateY(-12px) rotate(360deg);
-      }
-    }
   }
   &.loading {
     position: relative;

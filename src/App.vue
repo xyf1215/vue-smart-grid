@@ -6,6 +6,7 @@
   :event-hub="eventHub"
   :show-pages="5"
   :loading="loading"
+  :sizes="[10, 20, 50, 60]"
   @sort="handleSort"
   @pagination-change="query"
   @size-change="handleSizeChange"
