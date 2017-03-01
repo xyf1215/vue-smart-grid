@@ -8,6 +8,8 @@
 ## 使用
 ``````
 import VueSmartGrid from 'vue-smart-grid'
+import 'vue-smart-grid/dist/default.css'
+
 Vue.use(VueSmartGrid)
 ``````
 默认基于spring-data的分页参数，可以在install时传入options自定义
@@ -162,7 +164,10 @@ data: {
 ### multiple
 是否为多选，默认为true
 
-### eventHub
+### show-pages
+分页默认展示的条数
+
+### event-hub
 触发vue-smart-gird事件时使用
 
 ### border
@@ -173,7 +178,7 @@ x与y同理
 ### loading
 是否显示加载动画，默认为false
 
-### hiddenColumn
+### hidden-column
 是否隐藏表头，默认为false
 
 ## 事件

@@ -4,6 +4,7 @@ var utils = require('./utils')
 var webpack = require('webpack')
 var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var env = config.build.env
 
 var webpackConfig = merge(baseWebpackConfig, {
@@ -11,12 +12,12 @@ var webpackConfig = merge(baseWebpackConfig, {
     app: './src/package.js'
   },
   module: {
-    loaders: utils.styleLoaders({ sourceMap: config.build.productionSourceMap })
+    loaders: utils.styleLoaders({ sourceMap: config.build.productionSourceMap, extract: true })
   },
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
     path: config.build.assetsRoot,
-    filename: utils.assetsPath('bundle.js'),
+    filename: utils.assetsPath('vue-smart-grid.js'),
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
@@ -36,7 +37,8 @@ var webpackConfig = merge(baseWebpackConfig, {
         warnings: false
       }
     }),
-    new webpack.optimize.OccurrenceOrderPlugin()
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new ExtractTextPlugin(utils.assetsPath('default.css'))
   ]
 })
 

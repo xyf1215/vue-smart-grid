@@ -3,23 +3,39 @@
     <div class="hidden">
       <slot></slot>
     </div>
-    <div class="layer"></div>
+    <div class="layer">
+      <i class="iconfont icon-loading"></i>
+    </div>
     <table>
       <thead v-if="!hiddenColumn">
         <tr>
           <th v-if="selectable && multiple" class="checkbox-row">
-            <label class="grid-checkbox"><span class="checkbox-wrap" :class="{checked: allChecked}" @click="handleAllCheck"></span></label>
+            <label class="grid-checkbox">
+              <span class="checkbox-wrap" :class="{checked: allChecked}" @click="handleAllCheck"></span>
+            </label>
           </th>
-          <th v-for="header in headers">{{header.label}}</th>
+          <th v-for="header in headers" :style="header.style">{{header.label}}</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in innerData" @click="handleRowCheck(row, true)" :class="{checked: row.$checked}" @dblclick="handleDblClick(row)">
+        <tr v-for="row in innerData"
+          @click="handleRowCheck(row, true)"
+          :class="{checked: row.$checked}"
+          @dblclick="handleDblClick(row)">
           <td v-if="selectable && multiple" class="checkbox-row">
-            <label class="grid-checkbox"><span class="checkbox-wrap" :class="{checked: row.$checked}" @click.stop="handleRowCheck(row)"></span></label>
+            <label class="grid-checkbox">
+              <span class="checkbox-wrap"
+                :class="{checked: row.$checked}"
+                @click.stop="handleRowCheck(row)"></span>
+            </label>
           </td>
           <td v-if="cell" v-for="cell in row.cells" :style="cell.style">
-            <smart-grid-cell :row-data="row.rowData" :code="cell.code" :label="cell.label" :valueset="cell.valueset" :default-slot-fn="cell.defaultSlotFn"></smart-grid-cell>
+            <smart-grid-cell
+              :row-data="row.rowData"
+              :code="cell.code"
+              :label="cell.label"
+              :valueset="cell.valueset"
+              :default-slot-fn="cell.defaultSlotFn"></smart-grid-cell>
           </td>
         </tr>
         <tr v-if="cellSize && empty">
@@ -30,6 +46,7 @@
     <smart-grid-pagination v-if="pageable"
       :pagination="data"
       :event-hub="eventHub"
+      :show-pages="showPages"
       @size-change="size => {$emit('size-change', size)}"
       @page-change="page => {$emit('page-change', page)}"
       @pagination-change="params => {$emit('pagination-change', params)}"
@@ -71,11 +88,11 @@ export default {
       type: Boolean,
       default: false
     },
+    showPages: {
+      type: Number
+    },
     eventHub: {
-      type: Object,
-      default() {
-        return {}
-      }
+      type: Object
     }
   },
   data() {
@@ -229,18 +246,16 @@ export default {
       width: 30px;
       text-align: center;
     }
+    &:not(:first-child) {
+      border-left: 0;
+    }
+    text-align: left;
   }
   th {
     background-color: #fbfaf7;
     border: 1px solid #e4e4dc;
     color: #333;
     font-size: 14px;
-    &:not(:first-child) {
-      border-left: 0;
-    }
-    &:not(:last-child) {
-      border-right: 0;
-    }
   }
   tr:last-child td {
     border-bottom: 1px solid #f2f1ec;
@@ -250,9 +265,6 @@ export default {
     font-size: 12px;
     border: 1px solid #f2f1ec;
     border-bottom: 0;
-    &:not(:first-child) {
-      border-left: 0;
-    }
     &>.empty-cell {
       display: inline-block;
       height: 14px;
@@ -265,9 +277,31 @@ export default {
     left: 0;
     bottom: 0;
     right: 0;
-    background: url(../assets/images/loading.gif) no-repeat center center rgba(192, 192, 192, .5);
+    background-color: rgba(192, 192, 192, .5);
     z-index: -1;
     opacity: 0;
+    text-align: center;
+    .iconfont {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-12px);
+      animation: rotating 1s linear infinite;
+      font-size: 24px;
+      display: inline-block;
+      text-align: center;
+      height: 24px;
+      width: 24px;
+      color: #333;
+      line-height: 24px;
+    }
+    @keyframes rotating {
+      0%, 100% {
+        transform: translateY(-12px) rotate(0deg);
+      }
+      100% {
+        transform: translateY(-12px) rotate(360deg);
+      }
+    }
   }
   &.loading {
     position: relative;

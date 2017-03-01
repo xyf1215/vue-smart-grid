@@ -36,6 +36,10 @@ export default {
       default() {
         return {}
       }
+    },
+    showPages: {
+      type: Number,
+      default: 10
     }
   },
   watch: {
@@ -80,7 +84,7 @@ export default {
     },
     calcShowPages() {
       this.pages = []
-      let showPages = 10
+      let showPages = this.showPages
       let start = 0
       let end = this.totalPages
       if (showPages < this.totalPages) {

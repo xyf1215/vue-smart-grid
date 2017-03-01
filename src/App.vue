@@ -1,9 +1,22 @@
 <template>
 <div id="app">
-  <smart-grid :data="data" @reload="reload" :event-hub="eventHub" :loading="loading" @pagination-change="query" @size-change="handleSizeChange" @page-change="handlePageChange" @all-select="handleAllSelect" @select="handleSelect" @dblclick="handleDblClick" @click="handleClick">
+  <smart-grid
+  :data="data"
+  @reload="reload"
+  :event-hub="eventHub"
+  :show-pages="5"
+  :loading="loading"
+  @sort="handleSort"
+  @pagination-change="query"
+  @size-change="handleSizeChange"
+  @page-change="handlePageChange"
+  @all-select="handleAllSelect"
+  @select="handleSelect"
+  @dblclick="handleDblClick"
+  @click="handleClick">
       <smart-grid-column label="性别" code="sex" width="120px" align="right"></smart-grid-column>
-      <smart-grid-column label="年龄" code="age" width="120px" align="center"></smart-grid-column>
-      <smart-grid-column label="类型" code="type" :valueset="{1: '牛', 2: '不牛'}" width="120px" align="center"></smart-grid-column>
+      <smart-grid-column label="年龄" :sort="true" code="age" width="120px" align="center"></smart-grid-column>
+      <smart-grid-column label="类型" :sort="true" code="type" :valueset="{1: '牛', 2: '不牛'}" width="120px" align="center"></smart-grid-column>
       <smart-grid-column label="班级" code="clazz.name" width="120px" align="center"></smart-grid-column>
       <smart-grid-column label="姓名" code="name">
         <template scope="props">
@@ -11,7 +24,7 @@
             <span>{{props.row.sex}}</span>
             <span>{{props.row.age}}</span>
             <span>{{title}}</span>
-          </tempate>
+          </template>
       </smart-grid-column>
       <div slot="empty">没有数据...</div>
     </smart-grid>
@@ -31,6 +44,9 @@ export default {
     }
   },
   methods: {
+    handleSort(params) {
+
+    },
     toReload() {
       this.eventHub.$emit('reload')
     },
