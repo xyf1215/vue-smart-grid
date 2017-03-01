@@ -1,5 +1,5 @@
 <template>
-  <div class="pagination clearfix">
+  <div class="smart-grid-pagination clearfix">
     <div class="pull-left">
       共<span class="total">{{totalElements}}</span>条数据，每页显示
       <select class="form-control" v-model="size" @change="handleSizeChange">
@@ -148,8 +148,8 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
-.pagination {
+<style lang="less">
+.smart-grid-pagination {
   font-size: 12px;
   margin-top: 10px;
   select {

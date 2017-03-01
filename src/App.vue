@@ -1,6 +1,6 @@
 <template>
 <div id="app">
-  <smart-grid :data="data" @reload="reload" :event-hub="eventHub" :loading="loading" @pagination-change="query" @size-change="handleSizeChange" @page-change="handlePageChange" @all-select="handleAllSelect" @select="handleSelect" @dblclick="handleDbClick">
+  <smart-grid :data="data" @reload="reload" :event-hub="eventHub" :loading="loading" @pagination-change="query" @size-change="handleSizeChange" @page-change="handlePageChange" @all-select="handleAllSelect" @select="handleSelect" @dblclick="handleDblClick" @click="handleClick">
       <smart-grid-column label="性别" code="sex" width="120px" align="right"></smart-grid-column>
       <smart-grid-column label="年龄" code="age" width="120px" align="center"></smart-grid-column>
       <smart-grid-column label="类型" code="type" :valueset="{1: '牛', 2: '不牛'}" width="120px" align="center"></smart-grid-column>
@@ -52,8 +52,11 @@ export default {
     handleSelect(row, select) {
       console.log(row, select)
     },
-    handleDbClick(row) {
-      console.log(row)
+    handleDblClick(row) {
+      console.log('dblclick', row)
+    },
+    handleClick(row) {
+      console.log('click', row)
     }
   },
   created() {

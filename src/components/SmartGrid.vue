@@ -134,6 +134,7 @@ export default {
       this.$emit('all-select', checked)
     },
     handleRowCheck(row, onlyChecked = false) {
+      this.handleClick(row)
       if (!this.selectable) {
         return
       }
@@ -150,6 +151,9 @@ export default {
     },
     handleDblClick(row) {
       this.$emit('dblclick', row.rowData)
+    },
+    handleClick(row) {
+      this.$emit('click', row.rowData)
     },
     addHeader(header) {
       const {label, code, valueset} = header
@@ -186,7 +190,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .smart-grid {
   &.selectable:not(.multiple) {
     td {
@@ -273,38 +277,38 @@ export default {
       opacity: 1;
     }
   }
-}
-.hidden {
-  display: none;
-  visibility: hidden;
-}
+  .hidden {
+    display: none;
+    visibility: hidden;
+  }
 
-.grid-checkbox {
-  display: inline-block;
-  height: 14px;
-  width: 14px;
-  line-height: 14px;
-  overflow: hidden;
-  .checkbox-wrap {
+  .grid-checkbox {
     display: inline-block;
-    background-color: #fff;
-    border: 1px solid #e4e4dc;
-    height: 100%;
-    width: 100%;
-    &::after {
-      background-color: #0c8fd3;
-      content: " ";
+    height: 14px;
+    width: 14px;
+    line-height: 14px;
+    overflow: hidden;
+    .checkbox-wrap {
       display: inline-block;
-      margin: 1px;
-      height: 10px;
-      width: 10px;
-      opacity: 0;
-      cursor: pointer;
-    }
-    &.checked {
+      background-color: #fff;
+      border: 1px solid #e4e4dc;
+      height: 100%;
+      width: 100%;
       &::after {
-        transition: all .3s;
-        opacity: 1;
+        background-color: #0c8fd3;
+        content: " ";
+        display: inline-block;
+        margin: 1px;
+        height: 10px;
+        width: 10px;
+        opacity: 0;
+        cursor: pointer;
+      }
+      &.checked {
+        &::after {
+          transition: all .3s;
+          opacity: 1;
+        }
       }
     }
   }
