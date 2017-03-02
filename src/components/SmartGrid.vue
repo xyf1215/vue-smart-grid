@@ -302,26 +302,40 @@ export default {
     height: 14px;
     width: 14px;
     line-height: 14px;
+    border-radius: 4px;
+    border: 1px solid #e4e4dc;
     overflow: hidden;
     .checkbox-wrap {
       display: inline-block;
+      position: relative;
       background-color: #fff;
-      border: 1px solid #e4e4dc;
       height: 100%;
       width: 100%;
-      &::after {
-        background-color: #0c8fd3;
+      &::before, &::after {
         content: " ";
         display: inline-block;
-        margin: 1px;
-        height: 10px;
-        width: 10px;
         opacity: 0;
+      }
+      &::before {
+        position: absolute;
+        width: 5px;
+        height: 10px;
+        top: -1px;
+        right: 2.5px;
+        transform: rotate(45deg) scale(.7);
+        border-right: 2px solid #fff;
+        border-bottom: 2px solid #fff;
+      }
+      &::after {
+        background-color: #0c8fd3;
+        height: 100%;
+        width: 100%;
         cursor: pointer;
+        border-radius: 2px;
       }
       &.checked {
-        &::after {
-          transition: all .3s;
+        &::before, &::after {
+          transition: all .15s;
           opacity: 1;
         }
       }
