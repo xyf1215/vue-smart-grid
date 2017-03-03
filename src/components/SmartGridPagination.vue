@@ -35,6 +35,12 @@ export default {
         return {}
       }
     },
+    innerEventHub: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
     showPages: {
       type: Number,
       default: 10
@@ -63,10 +69,8 @@ export default {
     }
   },
   created() {
-    if (this.eventHub.$on) {
-      this.eventHub.$on('reload', this.handleReload)
-      this.eventHub.$on('sort-change', this.handleSortChange)
-    }
+    this.eventHub.$on && this.eventHub.$on('reload', this.handleReload)
+    this.innerEventHub.on && this.innerEventHub.on('sort-change', this.handleSortChange)
   },
   mounted() {
     this.initData()

@@ -47,6 +47,7 @@
     <smart-grid-pagination v-if="pageable"
       :pagination="data"
       :event-hub="eventHub"
+      :inner-event-hub="innerEventHub"
       :show-pages="showPages"
       :sizes="sizes"
       @sort-change="handleSortChange"
@@ -59,6 +60,7 @@
 </template>
 
 <script>
+import EventEmitter from 'event-emitter'
 import '../assets/styles/main.less'
 import {isEmptyObject, isObject} from 'libs/lang'
 import {config} from './index'
@@ -97,13 +99,7 @@ export default {
         return []
       }
     },
-    eventHub: {
-      type: Object,
-      default() {
-        /* eslint-disable no-undef */
-        return new Vue()
-      }
-    },
+    eventHub: Object,
     showPages: Number,
     sizes: Array
   },
@@ -113,7 +109,8 @@ export default {
       headers: [],
       innerData: [],
       cellSize: 0,
-      empty: false
+      empty: false,
+      innerEventHub: EventEmitter({})
     }
   },
   computed: {
@@ -226,7 +223,7 @@ export default {
           }
         }
       })
-      this.eventHub.$emit('sort-change')
+      this.innerEventHub.emit('sort-change')
     },
     fillEventParams(params) {
       if (!params) {
