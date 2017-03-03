@@ -7,15 +7,16 @@
   :show-pages="5"
   :loading="loading"
   :sizes="[10, 20, 50, 60]"
-  @sort="handleSort"
+  :hidden-columns="hiddenColumns"
   @pagination-change="query"
   @size-change="handleSizeChange"
   @page-change="handlePageChange"
+  @sort-change="handleSortChange"
   @all-select="handleAllSelect"
   @select="handleSelect"
   @dblclick="handleDblClick"
   @click="handleClick">
-      <smart-grid-column label="性别" code="sex" width="120px" align="right"></smart-grid-column>
+      <smart-grid-column label="性别" :sort="true" code="sex" width="120px" align="right"></smart-grid-column>
       <smart-grid-column label="年龄" :sort="true" code="age" width="120px" align="center"></smart-grid-column>
       <smart-grid-column label="类型" :sort="true" code="type" :valueset="{1: '牛', 2: '不牛'}" width="120px" align="center"></smart-grid-column>
       <smart-grid-column label="班级" code="clazz.name" width="120px" align="center"></smart-grid-column>
@@ -41,13 +42,11 @@ export default {
       title: 'ABC',
       loading: true,
       data: {},
+      hiddenColumns: ['age'],
       eventHub: new Vue()
     }
   },
   methods: {
-    handleSort(params) {
-
-    },
     toReload() {
       this.eventHub.$emit('reload')
     },
@@ -55,13 +54,13 @@ export default {
       console.log('reload', params)
     },
     handleSizeChange(size) {
-      console.log(size)
+      // console.log(size)
     },
     handlePageChange(page) {
-      console.log(page)
+      // console.log(page)
     },
-    query({size, number}) {
-      console.log('query', size, number)
+    query(params) {
+      console.log('query', params)
     },
     handleAllSelect(select) {
       console.log(select)
@@ -74,6 +73,9 @@ export default {
     },
     handleClick(row) {
       console.log('click', row)
+    },
+    handleSortChange(params) {
+      console.log('sort', params)
     }
   },
   created() {
@@ -116,6 +118,7 @@ export default {
         totalElements: 108,
         number: 0
       }
+      this.hiddenColumns.push('name')
       this.loading = false
     }, 1000)
   }

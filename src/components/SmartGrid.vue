@@ -12,7 +12,10 @@
               <span class="checkbox-wrap" :class="{checked: allChecked}" @click="handleAllCheck"></span>
             </label>
           </th>
-          <th v-for="header in headers" :style="header.style">{{header.label}}</th>
+          <th v-for="header in headers" v-if="hiddenColumns.indexOf(header.code) === -1" :style="header.style" :class="{sort: header.sort}" @click="handleSort(header)">
+            {{header.label}}
+            <span class="sort-place" :class="[header.sortDirection]"></span>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -27,7 +30,7 @@
                 @click.stop="handleRowCheck(row)"></span>
             </label>
           </td>
-          <td v-if="cell" v-for="cell in row.cells" :style="cell.style">
+          <td v-if="hiddenColumns.indexOf(cell.code) === -1 && cell" v-for="cell in row.cells" :style="cell.style">
             <smart-grid-cell
               :row-data="row.rowData"
               :code="cell.code"
@@ -46,10 +49,11 @@
       :event-hub="eventHub"
       :show-pages="showPages"
       :sizes="sizes"
-      @size-change="size => {$emit('size-change', size)}"
-      @page-change="page => {$emit('page-change', page)}"
-      @pagination-change="params => {$emit('pagination-change', params)}"
-      @reload="params => {$emit('reload', params)}">
+      @sort-change="handleSortChange"
+      @size-change="params => $emit('size-change', params)"
+      @page-change="params => $emit('page-change', params)"
+      @pagination-change="handlePaginationChange"
+      @reload="handleReload">
     </smart-grid-pagination>
   </div>
 </template>
@@ -87,15 +91,21 @@ export default {
       type: Boolean,
       default: false
     },
-    showPages: {
-      type: Number
+    hiddenColumns: {
+      type: Array,
+      default() {
+        return []
+      }
     },
     eventHub: {
-      type: Object
+      type: Object,
+      default() {
+        /* eslint-disable no-undef */
+        return new Vue()
+      }
     },
-    sizes: {
-      type: Array
-    }
+    showPages: Number,
+    sizes: Array
   },
   data() {
     return {
@@ -175,11 +185,13 @@ export default {
       this.$emit('click', row.rowData)
     },
     addHeader(header) {
-      const {label, code, valueset} = header
+      const {label, code, valueset, sort} = header
       this.headers.push({
         code,
         label,
         valueset,
+        sort,
+        sortDirection: '',
         style: this.extractHeaderStyle(header),
         defaultSlotFn: header.$scopedSlots ? header.$scopedSlots.default : null
       })
@@ -200,6 +212,44 @@ export default {
       if (this.selectable && this.multiple) {
         this.cellSize ++
       }
+    },
+    handleSort(header) {
+      if (!header.sort) {
+        return
+      }
+      this.headers.forEach(item => {
+        if (item.sort) {
+          if (header.code === item.code) {
+            header.sortDirection = header.sortDirection === '' ? 'desc' : header.sortDirection === 'desc' ? 'asc' : 'desc'
+          } else {
+            item.sortDirection = ''
+          }
+        }
+      })
+      this.eventHub.$emit('sort-change')
+    },
+    fillEventParams(params) {
+      if (!params) {
+        return
+      }
+      const sortHeader = this.headers.filter(({sort, sortDirection}) => sort && sortDirection)[0]
+      if (sortHeader) {
+        const {code, sortDirection} = sortHeader
+        params.sortCode = code
+        params.sortDirection = sortDirection
+      }
+    },
+    handleSortChange(params) {
+      this.fillEventParams(params)
+      this.$emit('sort-change', params)
+    },
+    handlePaginationChange(params) {
+      this.fillEventParams(params)
+      this.$emit('pagination-change', params)
+    },
+    handleReload(params) {
+      this.fillEventParams(params)
+      this.$emit('reload', params)
     }
   },
   components: {
@@ -258,6 +308,27 @@ export default {
     border: 1px solid #e4e4dc;
     color: #333;
     font-size: 14px;
+    .sort-place {
+      display: none;
+    }
+    &.sort {
+      cursor: pointer;
+      .sort-place {
+        display: inline-block;
+        position: relative;
+        top: 2px;
+        width: 14px;
+        height: 14px;
+        background: url(../assets/images/sort.png) no-repeat center center;
+        transition: all .3s;
+        &.asc {
+          background: url(../assets/images/asc.png) no-repeat center center;
+        }
+        &.desc {
+          background: url(../assets/images/desc.png) no-repeat center center;
+        }
+      }
+    }
   }
   tr:last-child td {
     border-bottom: 1px solid #f2f1ec;

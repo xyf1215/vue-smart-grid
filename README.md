@@ -26,10 +26,25 @@ Vue.use(VueSmartGrid, {
 ``````
 <template>
 <div id="app">
-  <smart-grid :data="data" @reload="reload" :event-hub="eventHub" :loading="loading" @pagination-change="query" @size-change="handleSizeChange" @page-change="handlePageChange" @all-select="handleAllSelect" @select="handleSelect" @dblclick="handleDblClick" @click="handleClick">
-      <smart-grid-column label="性别" code="sex" width="120px" align="right"></smart-grid-column>
-      <smart-grid-column label="年龄" code="age" width="120px" align="center"></smart-grid-column>
-      <smart-grid-column label="类型" code="type" :valueset="{1: '牛', 2: '不牛'}" width="120px" align="center"></smart-grid-column>
+  <smart-grid
+  :data="data"
+  @reload="reload"
+  :event-hub="eventHub"
+  :show-pages="5"
+  :loading="loading"
+  :sizes="[10, 20, 50, 60]"
+  :hidden-columns="hiddenColumns"
+  @pagination-change="query"
+  @size-change="handleSizeChange"
+  @page-change="handlePageChange"
+  @sort-change="handleSortChange"
+  @all-select="handleAllSelect"
+  @select="handleSelect"
+  @dblclick="handleDblClick"
+  @click="handleClick">
+      <smart-grid-column label="性别" :sort="true" code="sex" width="120px" align="right"></smart-grid-column>
+      <smart-grid-column label="年龄" :sort="true" code="age" width="120px" align="center"></smart-grid-column>
+      <smart-grid-column label="类型" :sort="true" code="type" :valueset="{1: '牛', 2: '不牛'}" width="120px" align="center"></smart-grid-column>
       <smart-grid-column label="班级" code="clazz.name" width="120px" align="center"></smart-grid-column>
       <smart-grid-column label="姓名" code="name">
         <template scope="props">
@@ -37,7 +52,7 @@ Vue.use(VueSmartGrid, {
             <span>{{props.row.sex}}</span>
             <span>{{props.row.age}}</span>
             <span>{{title}}</span>
-          </tempate>
+          </template>
       </smart-grid-column>
       <div slot="empty">没有数据...</div>
     </smart-grid>
@@ -53,6 +68,7 @@ export default {
       title: 'ABC',
       loading: true,
       data: {},
+      hiddenColumns: ['age'],
       eventHub: new Vue()
     }
   },
@@ -64,13 +80,13 @@ export default {
       console.log('reload', params)
     },
     handleSizeChange(size) {
-      console.log(size)
+      // console.log(size)
     },
     handlePageChange(page) {
-      console.log(page)
+      // console.log(page)
     },
-    query({size, number}) {
-      console.log('query', size, number)
+    query(params) {
+      console.log('query', params)
     },
     handleAllSelect(select) {
       console.log(select)
@@ -83,6 +99,9 @@ export default {
     },
     handleClick(row) {
       console.log('click', row)
+    },
+    handleSortChange(params) {
+      console.log('sort', params)
     }
   },
   created() {
@@ -125,12 +144,12 @@ export default {
         totalElements: 108,
         number: 0
       }
+      this.hiddenColumns.push('name')
       this.loading = false
-    }, 2000)
+    }, 1000)
   }
 }
 </script>
-
 ``````
 
 ## Smart-grid API
@@ -155,44 +174,52 @@ data: {
   }
 }
 ``````
-### hoverable
+### hoverable:Boolean
 是否一个悬停，默认为true
 
-### selectable
+### selectable:Boolean
 是否可选择，默认为true
 
-### multiple
+### multiple:Boolean
 是否为多选，默认为true
 
-### show-pages
+### show-pages:Number
 分页默认展示的条数
 
-### event-hub
+### event-hub:Vue
 触发vue-smart-gird事件时使用
 
-### border
+### border:String
 表格样式，默认'xy'，可取值：'xy','x','y'
 'xy':x与y都会有边栏
 x与y同理
 
-### loading
+### loading:Boolean
 是否显示加载动画，默认为false
 
-### hidden-column
+### hidden-column:Boolean
 是否隐藏表头，默认为false
 
-### sizes
+### hidden-columns:Array
+需要隐藏的列
+
+### sizes:Array
 分页条数，默认"[10, 20, 50, 60]"
 
 ## 事件
 ### size-change
 改变条数时会出发
+可用pagination-change事件代替
 
 ### page-change
 改变页数时会出发
+可用pagination-change事件代替
 
 ### pagination-change
 改变页数或条数时都会出发
+
+### sort-change
+触发排序时触发
 
 ### dblclick
 双击行时触发
@@ -210,17 +237,20 @@ x与y同理
 选中、取消全选时会触发
 
 ## Smart-grid-column API
-### label
+### label:String
 列的名称
 
-### code
+### code:String
 列的代码
 
-### width
+### width:String
 列的宽度
 
-### align
+### align:String
 对齐方式
 
-### valueset
+### sort:Boolean
+是否开启排序
+
+### valueset:Object
 代码集对象

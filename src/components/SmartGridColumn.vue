@@ -8,7 +8,8 @@ export default {
     code: String,
     width: String,
     align: String,
-    valueset: Object
+    valueset: Object,
+    sort: Boolean
   },
   mounted() {
     this.$parent.addHeader(this)

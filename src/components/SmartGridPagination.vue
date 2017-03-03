@@ -63,7 +63,10 @@ export default {
     }
   },
   created() {
-    this.eventHub.$on && this.eventHub.$on('reload', this.handleReload)
+    if (this.eventHub.$on) {
+      this.eventHub.$on('reload', this.handleReload)
+      this.eventHub.$on('sort-change', this.handleSortChange)
+    }
   },
   mounted() {
     this.initData()
@@ -135,22 +138,22 @@ export default {
       this.handlePaginationChange({size: this.size, number: newNumber})
     },
     handlePaginationChange(params) {
-      // number和page指向一个值 k-lib需要
       if (typeof params.number !== undefined) {
         params.page = params.number
       }
       this.$emit('pagination-change', params)
       this.calcShowPages()
     },
-    handleReload() {
-      // 重新
+    handleSortChange() {
+      this.number = this.pagination[number] = 0
       const {size, number} = this
-      const params = {
-        size,
-        number,
-        // number和page指向一个值 k-lib需要
-        page: number
-      }
+      const params = { size, number, page: number }
+      this.$emit('sort-change', params)
+      this.calcShowPages()
+    },
+    handleReload() {
+      const {size, number} = this
+      const params = { size, number, page: number }
       this.$emit('reload', params)
     }
   }
