@@ -7,11 +7,12 @@
     <table>
       <thead v-if="!hiddenColumn">
         <tr>
-          <th v-if="selectable && multiple" class="checkbox-row">
+          <th v-if="selectable && multiple" class="checkbox-cell">
             <label class="grid-checkbox">
               <span class="checkbox-wrap" :class="{checked: allChecked}" @click="handleAllCheck"></span>
             </label>
           </th>
+          <th v-if="timelime" class="timeline"></th>
           <th v-for="header in headers" v-if="hiddenColumns.indexOf(header.code) === -1" :style="header.style" :class="{sort: header.sort, [header.sortDirection]: true}" @click="handleSort(header)">
             {{header.label}}
             <span class="sort-place"></span>
@@ -23,13 +24,14 @@
           @click="handleRowCheck(row, true)"
           :class="{checked: row.$checked}"
           @dblclick="handleDblClick(row)">
-          <td v-if="selectable && multiple" class="checkbox-row">
+          <td v-if="selectable && multiple" class="checkbox-cell">
             <label class="grid-checkbox">
               <span class="checkbox-wrap"
                 :class="{checked: row.$checked}"
                 @click.stop="handleRowCheck(row)"></span>
             </label>
           </td>
+          <td v-if="timelime" class="timeline"></td>
           <td v-if="hiddenColumns.indexOf(cell.code) === -1 && cell" v-for="cell in row.cells" :style="cell.style">
             <smart-grid-cell
               :row-data="row.rowData"
@@ -84,6 +86,10 @@ export default {
     border: {
       type: String,
       default: 'xy'
+    },
+    timelime: {
+      type: Boolean,
+      default: false
     },
     loading: {
       type: Boolean,
@@ -270,6 +276,12 @@ export default {
     transition: all .3s;
     background-color: #f5f4f1;
   }
+  &.none {
+    td, th {
+      border: none!important;
+      border: none!important;
+    }
+  }
   &.x {
     td, th {
       border-left: none!important;
@@ -291,7 +303,11 @@ export default {
   }
   th, td {
     padding: 8px 12px;
-    &.checkbox-row {
+    &.checkbox-cell {
+      width: 30px;
+      text-align: center;
+    }
+    &.timeline {
       width: 30px;
       text-align: center;
     }
@@ -331,8 +347,18 @@ export default {
       }
     }
   }
-  tr:last-child td {
-    border-bottom: 1px solid #f2f1ec;
+  tr {
+    &:first-child td {
+      &.timeline::before {
+        top: 50%;
+      }
+    }
+    &:last-child td {
+      border-bottom: 1px solid #f2f1ec;
+      &.timeline::before {
+        bottom: 50%;
+      }
+    }
   }
   td {
     color: #666;
@@ -343,6 +369,32 @@ export default {
       display: inline-block;
       height: 14px;
       width: 14px;
+    }
+    &.timeline {
+      position: relative;
+      &::before, &::after {
+        content: ' ';
+        position: absolute;
+        display: inline-block;
+      }
+      &::before {
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-1.5px);
+        width: 3px;
+        background-color: #4db5e6;
+      }
+      &::after {
+        top: 50%;
+        left: 50%;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        transform: translate(-9px, -9px);
+        border: 1px solid #fff;
+        background-color: #4db5e6;
+      }
     }
   }
   .layer {

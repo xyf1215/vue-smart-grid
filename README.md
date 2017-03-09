@@ -189,8 +189,11 @@ data: {
 ### event-hub:Vue
 触发vue-smart-gird事件时使用
 
+### timelime
+是否打开时间轴样式
+
 ### border:String
-表格样式，默认'xy'，可取值：'xy','x','y'
+表格样式，默认'xy'，可取值：'xy','x','y','none'
 'xy':x与y都会有边栏
 x与y同理
 

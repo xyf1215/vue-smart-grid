@@ -1,15 +1,16 @@
 <template>
 <div id="app">
-  <span>1</span>
-
   <smart-grid
   :data="data"
   @reload="reload"
+  :timelime="true"
   :event-hub="eventHub"
   :show-pages="5"
   :loading="loading"
   :sizes="[10, 20, 50, 60]"
+  border="none"
   :hidden-columns="hiddenColumns"
+  :selectable="false"
   @pagination-change="query"
   @size-change="handleSizeChange"
   @page-change="handlePageChange"
@@ -82,44 +83,48 @@ export default {
   },
   created() {
     setTimeout(() => {
-      this.data = {
-        content: [
-          {
-            name: '张三',
-            sex: '男',
-            age: 33,
-            type: 1,
-            clazz: {
-              id: 1,
-              name: '三班'
-            }
-          },
-          {
-            name: '李四',
-            sex: '女',
-            age: 23,
-            type: 2,
-            clazz: {
-              id: 2,
-              name: '四班'
-            }
-          },
-          {
-            name: '王五',
-            sex: '女',
-            age: 17,
-            type: 1,
-            clazz: {
-              id: 3,
-              name: '五班'
-            }
+      this.data = [
+        {
+          name: '张三',
+          sex: '男',
+          age: 33,
+          type: 1,
+          clazz: {
+            id: 1,
+            name: '三班'
           }
-        ],
-        size: 10,
-        totalPages: 15,
-        totalElements: 108,
-        number: 0
-      }
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
+          }
+        },
+        {
+          name: '王五',
+          sex: '女',
+          age: 17,
+          type: 1,
+          clazz: {
+            id: 3,
+            name: '五班'
+          }
+        },
+        {
+          name: '赵六',
+          sex: '男',
+          age: 1,
+          type: 1,
+          clazz: {
+            id: 3,
+            name: '五班'
+          }
+        }
+      ]
       this.hiddenColumns.push('name')
       this.loading = false
     }, 1000)
