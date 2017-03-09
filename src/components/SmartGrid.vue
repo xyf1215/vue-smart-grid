@@ -12,7 +12,7 @@
               <span class="checkbox-wrap" :class="{checked: allChecked}" @click="handleAllCheck"></span>
             </label>
           </th>
-          <th v-if="timelime" class="timeline"></th>
+          <th v-if="timeline" class="timeline"></th>
           <th v-for="header in headers" v-if="hiddenColumns.indexOf(header.code) === -1" :style="header.style" :class="{sort: header.sort, [header.sortDirection]: true}" @click="handleSort(header)">
             {{header.label}}
             <span class="sort-place"></span>
@@ -31,7 +31,7 @@
                 @click.stop="handleRowCheck(row)"></span>
             </label>
           </td>
-          <td v-if="timelime" class="timeline"></td>
+          <td v-if="timeline" class="timeline"></td>
           <td v-if="hiddenColumns.indexOf(cell.code) === -1 && cell" v-for="cell in row.cells" :style="cell.style">
             <smart-grid-cell
               :row-data="row.rowData"
@@ -87,7 +87,7 @@ export default {
       type: String,
       default: 'xy'
     },
-    timelime: {
+    timeline: {
       type: Boolean,
       default: false
     },

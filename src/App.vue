@@ -3,7 +3,7 @@
   <smart-grid
   :data="data"
   @reload="reload"
-  :timelime="true"
+  :timeline="true"
   :event-hub="eventHub"
   :show-pages="5"
   :loading="loading"
