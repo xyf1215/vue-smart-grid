@@ -1,5 +1,7 @@
 <template>
 <div id="app">
+  <span>1</span>
+
   <smart-grid
   :data="data"
   @reload="reload"
@@ -124,3 +126,14 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+#app span {
+  background-color: #ddd;
+}
+#app .smart-grid {
+  td {
+    background-color: #f33!important;
+  }
+}
+</style>

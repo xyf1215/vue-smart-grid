@@ -12,9 +12,9 @@
               <span class="checkbox-wrap" :class="{checked: allChecked}" @click="handleAllCheck"></span>
             </label>
           </th>
-          <th v-for="header in headers" v-if="hiddenColumns.indexOf(header.code) === -1" :style="header.style" :class="{sort: header.sort}" @click="handleSort(header)">
+          <th v-for="header in headers" v-if="hiddenColumns.indexOf(header.code) === -1" :style="header.style" :class="{sort: header.sort, [header.sortDirection]: true}" @click="handleSort(header)">
             {{header.label}}
-            <span class="sort-place" :class="[header.sortDirection]"></span>
+            <span class="sort-place"></span>
           </th>
         </tr>
       </thead>
@@ -310,6 +310,16 @@ export default {
     }
     &.sort {
       cursor: pointer;
+      transition: all .3s;
+      &.asc, &.desc {
+        background-color: #e7f6fd;
+      }
+      &.asc .sort-place {
+        background: url(../assets/images/asc.png) no-repeat center center;
+      }
+      &.desc .sort-place {
+        background: url(../assets/images/desc.png) no-repeat center center;
+      }
       .sort-place {
         display: inline-block;
         position: relative;
@@ -318,12 +328,6 @@ export default {
         height: 14px;
         background: url(../assets/images/sort.png) no-repeat center center;
         transition: all .3s;
-        &.asc {
-          background: url(../assets/images/asc.png) no-repeat center center;
-        }
-        &.desc {
-          background: url(../assets/images/desc.png) no-repeat center center;
-        }
       }
     }
   }
