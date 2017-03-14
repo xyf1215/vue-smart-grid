@@ -20,7 +20,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in innerData"
+        <tr v-for="(row, rowIndex) in innerData"
           @click="handleRowCheck(row, true)"
           :class="{checked: row.$checked}"
           @dblclick="handleDblClick(row)">
@@ -32,8 +32,10 @@
             </label>
           </td>
           <td v-if="timeline" class="timeline"></td>
-          <td v-if="hiddenColumns.indexOf(cell.code) === -1 && cell" v-for="cell in row.cells" :style="cell.style">
+          <td v-if="hiddenColumns.indexOf(cell.code) === -1 && cell" v-for="(cell, cellIndex) in row.cells" :style="cell.style">
             <smart-grid-cell
+              :row-index="rowIndex"
+              :cell-index="cellIndex"
               :row-data="row.rowData"
               :code="cell.code"
               :label="cell.label"

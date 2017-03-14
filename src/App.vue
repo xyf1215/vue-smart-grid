@@ -8,7 +8,6 @@
   :show-pages="5"
   :loading="loading"
   :sizes="[10, 20, 50, 60]"
-  border="none"
   :hidden-columns="hiddenColumns"
   :selectable="false"
   @pagination-change="query"
@@ -29,6 +28,7 @@
             <span>{{props.row.sex}}</span>
             <span>{{props.row.age}}</span>
             <span>{{title}}</span>
+            <span>{{props.rowIndex}}{{props.cellIndex}}</span>
           </template>
       </smart-grid-column>
       <div slot="empty">没有数据...</div>
@@ -125,7 +125,10 @@ export default {
           }
         }
       ]
-      this.hiddenColumns.push('name')
+      // this.hiddenColumns.push('name')
+      setTimeout(() => {
+        this.data.splice(1, 1)
+      }, 2000)
       this.loading = false
     }, 1000)
   }

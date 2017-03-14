@@ -17,6 +17,8 @@ export default {
         return {}
       }
     },
+    rowIndex: Number,
+    cellIndex: Number,
     defaultSlotFn: Function
   },
   methods: {
@@ -25,7 +27,9 @@ export default {
         return this.defaultSlotFn({
           row: Object.assign({}, this.rowData),
           rawRow: this.rowData,
-          valueset: this.valueset
+          valueset: this.valueset,
+          rowIndex: this.rowIndex,
+          cellIndex: this.cellIndex
         })
       } else {
         let rowVal = getObjDeepVal(this.rowData, this.code)
