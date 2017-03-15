@@ -2,6 +2,7 @@
 import {getObjDeepVal, isEmptyObject} from 'libs/lang'
 
 export default {
+  functional: true,
   props: {
     label: String,
     code: String,
@@ -21,29 +22,24 @@ export default {
     cellIndex: Number,
     defaultSlotFn: Function
   },
-  methods: {
-    renderCell(h) {
-      if (this.defaultSlotFn) {
-        return this.defaultSlotFn({
-          row: Object.assign({}, this.rowData),
-          rawRow: this.rowData,
-          valueset: this.valueset,
-          rowIndex: this.rowIndex,
-          cellIndex: this.cellIndex
-        })
-      } else {
-        let rowVal = getObjDeepVal(this.rowData, this.code)
-        if (!isEmptyObject(this.valueset)) {
-          rowVal = this.valueset[rowVal]
-        }
-        return (<span>{rowVal}</span>)
+  render(h, context) {
+    let $cell = null
+    if (context.props.defaultSlotFn) {
+      $cell = context.props.defaultSlotFn({
+        row: Object.assign({}, context.props.rowData),
+        rawRow: context.props.rowData,
+        valueset: context.props.valueset,
+        rowIndex: context.props.rowIndex,
+        cellIndex: context.props.cellIndex
+      })
+    } else {
+      let rowVal = getObjDeepVal(context.props.rowData, context.props.code)
+      if (!isEmptyObject(context.props.valueset)) {
+        rowVal = context.props.valueset[rowVal]
       }
+      $cell = (<span>{rowVal}</span>)
     }
-  },
-  render(h) {
-    return (
-      <div>{this.renderCell(h)}</div>
-    )
+    return (<div>{$cell}</div>)
   }
 }
 </script>
