@@ -29,11 +29,14 @@ Vue.use(VueSmartGrid, {
   <smart-grid
   :data="data"
   @reload="reload"
+  :timeline="true"
   :event-hub="eventHub"
   :show-pages="5"
   :loading="loading"
   :sizes="[10, 20, 50, 60]"
+  :show-rows="2"
   :hidden-columns="hiddenColumns"
+  :selectable="false"
   @pagination-change="query"
   @size-change="handleSizeChange"
   @page-change="handlePageChange"
@@ -52,6 +55,7 @@ Vue.use(VueSmartGrid, {
             <span>{{props.row.sex}}</span>
             <span>{{props.row.age}}</span>
             <span>{{title}}</span>
+            <span>{{props.rowIndex}}{{props.cellIndex}}</span>
           </template>
       </smart-grid-column>
       <div slot="empty">没有数据...</div>
@@ -106,45 +110,62 @@ export default {
   },
   created() {
     setTimeout(() => {
-      this.data = {
-        content: [
-          {
-            name: '张三',
-            sex: '男',
-            age: 33,
-            type: 1,
-            clazz: {
-              id: 1,
-              name: '三班'
-            }
-          },
-          {
-            name: '李四',
-            sex: '女',
-            age: 23,
-            type: 2,
-            clazz: {
-              id: 2,
-              name: '四班'
-            }
-          },
-          {
-            name: '王五',
-            sex: '女',
-            age: 17,
-            type: 1,
-            clazz: {
-              id: 3,
-              name: '五班'
-            }
+      this.data = [
+        {
+          name: '张三',
+          sex: '男',
+          age: 33,
+          type: 1,
+          clazz: {
+            id: 1,
+            name: '三班'
           }
-        ],
-        size: 10,
-        totalPages: 15,
-        totalElements: 108,
-        number: 0
-      }
-      this.hiddenColumns.push('name')
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
+          }
+        },
+        {
+          name: '王五',
+          sex: '女',
+          age: 17,
+          type: 1,
+          clazz: {
+            id: 3,
+            name: '五班'
+          }
+        },
+        {
+          name: '赵六',
+          sex: '男',
+          age: 1,
+          type: 1,
+          clazz: {
+            id: 3,
+            name: '五班'
+          }
+        },
+        {
+          name: '啊六',
+          sex: '男',
+          age: 1,
+          type: 1,
+          clazz: {
+            id: 3,
+            name: '五班'
+          }
+        }
+      ]
+      // this.hiddenColumns.push('name')
+      setTimeout(() => {
+        this.data.splice(1, 1)
+      }, 2000)
       this.loading = false
     }, 1000)
   }
@@ -179,6 +200,12 @@ data: {
 
 ### selectable:Boolean
 是否可选择，默认为true
+
+### key:String
+用户提升性能，避免更少的渲染，一般为"id"
+
+### show-rows:Number
+显示多少条，更多的通过显示更多显示
 
 ### multiple:Boolean
 是否为多选，默认为true

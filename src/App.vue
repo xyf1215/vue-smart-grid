@@ -8,6 +8,7 @@
   :show-pages="5"
   :loading="loading"
   :sizes="[10, 20, 50, 60]"
+  :show-rows="2"
   :hidden-columns="hiddenColumns"
   :selectable="false"
   @pagination-change="query"
@@ -116,6 +117,16 @@ export default {
         },
         {
           name: '赵六',
+          sex: '男',
+          age: 1,
+          type: 1,
+          clazz: {
+            id: 3,
+            name: '五班'
+          }
+        },
+        {
+          name: '啊六',
           sex: '男',
           age: 1,
           type: 1,

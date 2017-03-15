@@ -21,6 +21,8 @@
       </thead>
       <tbody>
         <tr v-for="(row, rowIndex) in innerData"
+          :key="key ? key : rowIndex"
+          v-if="showAllMore || rowIndex < showRows"
           @click="handleRowCheck(row, true)"
           :class="{checked: row.$checked}"
           @dblclick="handleDblClick(row)">
@@ -42,6 +44,9 @@
               :valueset="cell.valueset"
               :default-slot-fn="cell.defaultSlotFn"></smart-grid-cell>
           </td>
+        </tr>
+        <tr v-if="innerData.length >= showRows">
+          <td :colspan="cellSize" @click="handleShowMore" class="show-more">{{showAllMore ? '收起更多' : '显示更多'}}</td>
         </tr>
         <tr v-if="cellSize && empty">
           <td :colspan="cellSize"><slot name="empty"></slot></td>
@@ -107,6 +112,11 @@ export default {
         return []
       }
     },
+    showRows: {
+      type: Number,
+      default: 100
+    },
+    key: String,
     eventHub: Object,
     showPages: Number,
     sizes: Array
@@ -118,6 +128,7 @@ export default {
       innerData: [],
       cellSize: 0,
       empty: false,
+      showAllMore: false,
       innerEventHub: EventEmitter({})
     }
   },
@@ -217,6 +228,9 @@ export default {
       if (this.selectable && this.multiple) {
         this.cellSize ++
       }
+    },
+    handleShowMore() {
+      this.showAllMore = !this.showAllMore
     },
     handleSort(header) {
       if (!header.sort) {
@@ -371,6 +385,10 @@ export default {
       display: inline-block;
       height: 14px;
       width: 14px;
+    }
+    &.show-more {
+      text-align: center;
+      cursor: pointer;
     }
     &.timeline {
       position: relative;
