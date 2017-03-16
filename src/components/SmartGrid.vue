@@ -13,7 +13,11 @@
             </label>
           </th>
           <th v-if="timeline" class="timeline"></th>
-          <th v-for="header in headers" v-if="hiddenColumns.indexOf(header.code) === -1" :style="header.style" :class="{sort: header.sort, [header.sortDirection]: true}" @click="handleSort(header)">
+          <th v-for="header in headers"
+            v-if="!header.hidden"
+            :style="header.style"
+            :class="{sort: header.sort, [header.sortDirection]: true}"
+            @click="handleSort(header)">
             {{header.label}}
             <span class="sort-place"></span>
           </th>
@@ -21,8 +25,8 @@
       </thead>
       <tbody>
         <tr v-for="(row, rowIndex) in innerData"
-          :key="key ? key : rowIndex"
           v-if="showAllMore || rowIndex < showRows"
+          :key="seq ? row.rowData[seq] : rowIndex"
           @click="handleRowCheck(row, true)"
           :class="{checked: row.$checked}"
           @dblclick="handleDblClick(row)">
@@ -34,7 +38,7 @@
             </label>
           </td>
           <td v-if="timeline" class="timeline"></td>
-          <td v-if="hiddenColumns.indexOf(cell.code) === -1 && cell" v-for="(cell, cellIndex) in row.cells" :style="cell.style">
+          <td v-for="(cell, cellIndex) in row.cells" v-if="!cell.hidden" :style="cell.style">
             <smart-grid-cell
               :row-index="rowIndex"
               :cell-index="cellIndex"
@@ -106,17 +110,11 @@ export default {
       type: Boolean,
       default: false
     },
-    hiddenColumns: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
     showRows: {
       type: Number,
       default: 100
     },
-    key: String,
+    seq: String,
     eventHub: Object,
     showPages: Number,
     sizes: Array
@@ -141,7 +139,7 @@ export default {
     this.initData()
   },
   watch: {
-    data(val) {
+    data() {
       this.initData()
     }
   },
@@ -201,17 +199,33 @@ export default {
       this.$emit('click', row.rowData)
     },
     addHeader(header) {
-      const {label, code, valueset, sort} = header
+      const {label, code, valueset, hidden, sort} = header
       this.headers.push({
         code,
         label,
         valueset,
+        hidden: !!hidden,
         sort,
         sortDirection: '',
         style: this.extractHeaderStyle(header),
         defaultSlotFn: header.$scopedSlots ? header.$scopedSlots.default : null
       })
-      this.cellSize ++
+    },
+    setHeaderHidden(header, hidden = false) {
+      const {code} = header
+      this.headers.forEach(item => {
+        if (item.code === code) {
+          item.hidden = hidden
+        }
+      })
+      this.calcExpandCellSize()
+      // this.$forceUpdate()
+      // this.headers = this.headers.map(item => {
+      //   if (item.code === code) {
+      //     item = {...item, ...options}
+      //   }
+      //   return item
+      // })
     },
     extractHeaderStyle(header) {
       const {width, align} = header
@@ -225,9 +239,19 @@ export default {
       return style
     },
     calcExpandCellSize() {
+      let cellSize = 0
+      this.headers.forEach(({hidden}) => {
+        if (!hidden) {
+          cellSize++
+        }
+      })
       if (this.selectable && this.multiple) {
-        this.cellSize ++
+        cellSize++
       }
+      if (this.timeline) {
+        cellSize++
+      }
+      this.cellSize = cellSize
     },
     handleShowMore() {
       this.showAllMore = !this.showAllMore

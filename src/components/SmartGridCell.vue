@@ -26,7 +26,7 @@ export default {
     let $cell = null
     if (context.props.defaultSlotFn) {
       $cell = context.props.defaultSlotFn({
-        row: Object.assign({}, context.props.rowData),
+        row: {...context.props.rowData},
         rawRow: context.props.rowData,
         valueset: context.props.valueset,
         rowIndex: context.props.rowIndex,

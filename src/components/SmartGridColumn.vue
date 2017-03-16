@@ -1,6 +1,3 @@
-<template>
-</template>
-
 <script>
 export default {
   props: {
@@ -9,10 +6,19 @@ export default {
     width: String,
     align: String,
     valueset: Object,
+    hidden: Boolean,
     sort: Boolean
+  },
+  watch: {
+    hidden(val) {
+      this.$parent.setHeaderHidden(this, val)
+    }
   },
   mounted() {
     this.$parent.addHeader(this)
+  },
+  render(h) {
+    return null
   }
 }
 </script>

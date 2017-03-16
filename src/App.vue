@@ -2,14 +2,14 @@
 <div id="app">
   <smart-grid
   :data="data"
+  seq="name"
   @reload="reload"
-  :timeline="true"
+  :timeline="false"
   :event-hub="eventHub"
   :show-pages="5"
   :loading="loading"
   :sizes="[10, 20, 50, 60]"
   :show-rows="2"
-  :hidden-columns="hiddenColumns"
   :selectable="false"
   @pagination-change="query"
   @size-change="handleSizeChange"
@@ -19,17 +19,17 @@
   @select="handleSelect"
   @dblclick="handleDblClick"
   @click="handleClick">
-      <smart-grid-column label="性别" :sort="true" code="sex" width="120px" align="right"></smart-grid-column>
+      <smart-grid-column label="性别" :sort="true" :hidden="sexShow" code="sex" width="120px" align="right"></smart-grid-column>
       <smart-grid-column label="年龄" :sort="true" code="age" width="120px" align="center"></smart-grid-column>
       <smart-grid-column label="类型" :sort="true" code="type" :valueset="{1: '牛', 2: '不牛'}" width="120px" align="center"></smart-grid-column>
       <smart-grid-column label="班级" code="clazz.name" width="120px" align="center"></smart-grid-column>
       <smart-grid-column label="姓名" code="name">
         <template scope="props">
-            <span>{{props.row.name}}</span>
-            <span>{{props.row.sex}}</span>
-            <span>{{props.row.age}}</span>
-            <span>{{title}}</span>
-            <span>{{props.rowIndex}}{{props.cellIndex}}</span>
+          <span>{{props.row.name}}</span>
+          <span>{{props.row.sex}}</span>
+          <span>{{props.row.age}}</span>
+          <span>{{title}}</span>
+          <span>{{props.rowIndex}}{{props.cellIndex}}</span>
           </template>
       </smart-grid-column>
       <div slot="empty">没有数据...</div>
@@ -46,8 +46,8 @@ export default {
       title: 'ABC',
       loading: true,
       data: {},
-      hiddenColumns: ['age'],
-      eventHub: new Vue()
+      eventHub: new Vue(),
+      sexShow: true
     }
   },
   methods: {
@@ -84,8 +84,8 @@ export default {
   },
   created() {
     setTimeout(() => {
-      this.data = [
-        {
+      this.data = {
+        content: [{
           name: '张三',
           sex: '男',
           age: 33,
@@ -134,14 +134,21 @@ export default {
             id: 3,
             name: '五班'
           }
-        }
-      ]
-      // this.hiddenColumns.push('name')
+        }],
+        totalElements: 11,
+        totalPages: 1,
+        last: true,
+        number: 0,
+        size: 20,
+        sort: null,
+        numberOfElements: 11,
+        first: true
+      }
       setTimeout(() => {
-        this.data.splice(1, 1)
+        this.sexShow = false
       }, 2000)
       this.loading = false
-    }, 1000)
+    }, 2000)
   }
 }
 </script>
