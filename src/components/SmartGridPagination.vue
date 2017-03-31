@@ -151,13 +151,13 @@ export default {
     handleSortChange() {
       this.number = this.pagination[number] = 0
       const {size, number} = this
-      const params = { size, number, page: number }
+      const params = {size, number, page: number}
       this.$emit('sort-change', params)
       this.calcShowPages()
     },
     handleReload() {
       const {size, number} = this
-      const params = { size, number, page: number }
+      const params = {size, number, page: number}
       this.$emit('reload', params)
     }
   }

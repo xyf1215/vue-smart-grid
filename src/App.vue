@@ -44,47 +44,8 @@ export default {
   data() {
     return {
       title: 'ABC',
-      loading: true,
-      data: {},
-      eventHub: new Vue(),
-      sexShow: true
-    }
-  },
-  methods: {
-    toReload() {
-      this.eventHub.$emit('reload')
-    },
-    reload(params) {
-      console.log('reload', params)
-    },
-    handleSizeChange(size) {
-      // console.log(size)
-    },
-    handlePageChange(page) {
-      // console.log(page)
-    },
-    query(params) {
-      console.log('query', params)
-    },
-    handleAllSelect(select) {
-      console.log(select)
-    },
-    handleSelect(row, select) {
-      console.log(row, select)
-    },
-    handleDblClick(row) {
-      console.log('dblclick', row)
-    },
-    handleClick(row) {
-      console.log('click', row)
-    },
-    handleSortChange(params) {
-      console.log('sort', params)
-    }
-  },
-  created() {
-    setTimeout(() => {
-      this.data = {
+      loading: false,
+      data: {
         content: [{
           name: '张三',
           sex: '男',
@@ -143,12 +104,42 @@ export default {
         sort: null,
         numberOfElements: 11,
         first: true
-      }
-      setTimeout(() => {
-        this.sexShow = false
-      }, 2000)
-      this.loading = false
-    }, 2000)
+      },
+      eventHub: new Vue(),
+      sexShow: true
+    }
+  },
+  methods: {
+    toReload() {
+      this.eventHub.$emit('reload')
+    },
+    reload(params) {
+      console.log('reload', params)
+    },
+    handleSizeChange(size) {
+      // console.log(size)
+    },
+    handlePageChange(page) {
+      // console.log(page)
+    },
+    query(params) {
+      console.log('query', params)
+    },
+    handleAllSelect(select) {
+      console.log(select)
+    },
+    handleSelect(row, select) {
+      console.log(row, select)
+    },
+    handleDblClick(row) {
+      console.log('dblclick', row)
+    },
+    handleClick(row) {
+      console.log('click', row)
+    },
+    handleSortChange(params) {
+      console.log('sort', params)
+    }
   }
 }
 </script>

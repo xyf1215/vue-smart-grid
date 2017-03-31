@@ -75,7 +75,7 @@
 <script>
 import EventEmitter from 'event-emitter'
 import '../assets/styles/main.less'
-import {isEmptyObject, isObject} from 'libs/lang'
+import {isObject} from 'libs/lang'
 import {config} from './index'
 import SmartGridCell from './SmartGridCell'
 import SmartGridPagination from './SmartGridPagination'
@@ -136,25 +136,16 @@ export default {
     }
   },
   created() {
-    this.initData()
+    this.parseData()
   },
   watch: {
     data() {
-      this.initData()
+      this.parseData()
     }
   },
   methods: {
-    initData() {
-      if (!this.data) {
-        return
-      }
-      if (isObject(this.data) && isEmptyObject(this.data)) {
-        return
-      }
-      this.parseData()
-    },
     parseData() {
-      let innerData = this.data
+      let innerData = this.data || []
       if (isObject(innerData)) {
         this.pageable = true
         innerData = innerData[config.dataNode] || []
@@ -167,7 +158,6 @@ export default {
         }
       })
       this.empty = !this.innerData.length
-      this.calcExpandCellSize()
     },
     handleAllCheck() {
       const checked = !this.allChecked
@@ -210,6 +200,7 @@ export default {
         style: this.extractHeaderStyle(header),
         defaultSlotFn: header.$scopedSlots ? header.$scopedSlots.default : null
       })
+      this.calcExpandCellSize()
     },
     setHeaderHidden(header, hidden = false) {
       const {code} = header
@@ -219,13 +210,6 @@ export default {
         }
       })
       this.calcExpandCellSize()
-      // this.$forceUpdate()
-      // this.headers = this.headers.map(item => {
-      //   if (item.code === code) {
-      //     item = {...item, ...options}
-      //   }
-      //   return item
-      // })
     },
     extractHeaderStyle(header) {
       const {width, align} = header

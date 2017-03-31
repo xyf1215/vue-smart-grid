@@ -28,6 +28,8 @@ module.exports = {
     'arrow-parens': ['error', 'as-needed'],
     // 使用箭头函数作为回调
     'prefer-arrow-callback': 'error',
+    // 对象两边不能有空格
+    'object-curly-spacing': ['error', 'never'],
     // // 使用模板而非字符串连接
     // 'prefer-template': 'error',
     // allow debugger during development

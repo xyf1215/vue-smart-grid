@@ -8,5 +8,5 @@ Vue.use(VueSmartGrid, {dataNode: 'content'})
 new Vue({
   el: '#app',
   template: '<App/>',
-  components: { App }
+  components: {App}
 })
