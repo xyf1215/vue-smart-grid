@@ -2,9 +2,6 @@
 
 > 基于Vue2开发的表格组件
 
-可基于源码二次开发
-[github](https://github.com/xyf1215/vue-smart-grid)
-
 ## 使用
 ``````
 import VueSmartGrid from 'vue-smart-grid'
@@ -27,6 +24,7 @@ Vue.use(VueSmartGrid, {
 <template>
 <div id="app">
   <smart-grid
+  ref="grid"
   :data="data"
   seq="name"
   @reload="reload"
@@ -36,7 +34,6 @@ Vue.use(VueSmartGrid, {
   :loading="loading"
   :sizes="[10, 20, 50, 60]"
   :show-rows="2"
-  :selectable="false"
   @pagination-change="query"
   @size-change="handleSizeChange"
   @page-change="handlePageChange"
@@ -60,7 +57,9 @@ Vue.use(VueSmartGrid, {
       </smart-grid-column>
       <div slot="empty">没有数据...</div>
     </smart-grid>
-    <button type="button" @click="toReload">reload</button>
+    <button type="button" @click="handleReload">reload</button>
+    <button type="button" @click="handleCheckedRows">checked rows</button>
+
   </div>
 </template>
 
@@ -70,47 +69,8 @@ export default {
   data() {
     return {
       title: 'ABC',
-      loading: true,
-      data: {},
-      eventHub: new Vue(),
-      sexShow: true
-    }
-  },
-  methods: {
-    toReload() {
-      this.eventHub.$emit('reload')
-    },
-    reload(params) {
-      console.log('reload', params)
-    },
-    handleSizeChange(size) {
-      // console.log(size)
-    },
-    handlePageChange(page) {
-      // console.log(page)
-    },
-    query(params) {
-      console.log('query', params)
-    },
-    handleAllSelect(select) {
-      console.log(select)
-    },
-    handleSelect(row, select) {
-      console.log(row, select)
-    },
-    handleDblClick(row) {
-      console.log('dblclick', row)
-    },
-    handleClick(row) {
-      console.log('click', row)
-    },
-    handleSortChange(params) {
-      console.log('sort', params)
-    }
-  },
-  created() {
-    setTimeout(() => {
-      this.data = {
+      loading: false,
+      data: {
         content: [{
           name: '张三',
           sex: '男',
@@ -169,12 +129,45 @@ export default {
         sort: null,
         numberOfElements: 11,
         first: true
-      }
-      setTimeout(() => {
-        this.sexShow = false
-      }, 2000)
-      this.loading = false
-    }, 2000)
+      },
+      eventHub: new Vue(),
+      sexShow: true
+    }
+  },
+  methods: {
+    handleReload() {
+      this.eventHub.$emit('reload')
+    },
+    reload(params) {
+      console.log('reload', params)
+    },
+    handleSizeChange(size) {
+      // console.log(size)
+    },
+    handlePageChange(page) {
+      // console.log(page)
+    },
+    query(params) {
+      console.log('query', params)
+    },
+    handleAllSelect(select) {
+      console.log(select)
+    },
+    handleSelect(row, select) {
+      console.log(row, select)
+    },
+    handleDblClick(row) {
+      console.log('dblclick', row)
+    },
+    handleClick(row) {
+      console.log('click', row)
+    },
+    handleSortChange(params) {
+      console.log('sort', params)
+    },
+    handleCheckedRows() {
+      console.log(this.$refs.grid.getCheckedRows())
+    }
   }
 }
 </script>
@@ -291,3 +284,7 @@ x与y同理
 
 ### hidden
 是否隐藏
+
+## 方法
+### getCheckedRows
+获取当前选中的行

@@ -1,6 +1,7 @@
 <template>
 <div id="app">
   <smart-grid
+  ref="grid"
   :data="data"
   seq="name"
   @reload="reload"
@@ -10,7 +11,6 @@
   :loading="loading"
   :sizes="[10, 20, 50, 60]"
   :show-rows="2"
-  :selectable="false"
   @pagination-change="query"
   @size-change="handleSizeChange"
   @page-change="handlePageChange"
@@ -34,7 +34,9 @@
       </smart-grid-column>
       <div slot="empty">没有数据...</div>
     </smart-grid>
-    <button type="button" @click="toReload">reload</button>
+    <button type="button" @click="handleReload">reload</button>
+    <button type="button" @click="handleCheckedRows">checked rows</button>
+
   </div>
 </template>
 
@@ -110,7 +112,7 @@ export default {
     }
   },
   methods: {
-    toReload() {
+    handleReload() {
       this.eventHub.$emit('reload')
     },
     reload(params) {
@@ -139,6 +141,9 @@ export default {
     },
     handleSortChange(params) {
       console.log('sort', params)
+    },
+    handleCheckedRows() {
+      console.log(this.$refs.grid.getCheckedRows())
     }
   }
 }

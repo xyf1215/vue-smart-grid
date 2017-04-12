@@ -277,6 +277,9 @@ export default {
     handleReload(params) {
       this.fillEventParams(params)
       this.$emit('reload', params)
+    },
+    getCheckedRows() {
+      return this.innerData.filter(({$checked}) => $checked).map(({rowData}) => rowData)
     }
   },
   components: {
