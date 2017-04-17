@@ -1,42 +1,17 @@
 <template>
 <div id="app">
-  <smart-grid
-  ref="grid"
-  :data="data"
-  seq="name"
-  @reload="reload"
-  :timeline="false"
-  :event-hub="eventHub"
-  :show-pages="5"
-  :loading="loading"
-  :sizes="[10, 20, 50, 60]"
-  :show-rows="2"
-  @pagination-change="query"
-  @size-change="handleSizeChange"
-  @page-change="handlePageChange"
-  @sort-change="handleSortChange"
-  @all-select="handleAllSelect"
-  @select="handleSelect"
-  @dblclick="handleDblClick"
-  @click="handleClick">
-      <smart-grid-column label="性别" :sort="true" :hidden="sexShow" code="sex" width="120px" align="right"></smart-grid-column>
-      <smart-grid-column label="年龄" :sort="true" code="age" width="120px" align="center"></smart-grid-column>
-      <smart-grid-column label="类型" :sort="true" code="type" :valueset="{1: '牛', 2: '不牛'}" width="120px" align="center"></smart-grid-column>
-      <smart-grid-column label="班级" code="clazz.name" width="120px" align="center"></smart-grid-column>
-      <smart-grid-column label="姓名" code="name">
+  <smart-grid :data="data" :inline-rows="6" :loading="loading" :selectable="false" :hoverable="false" border="none" hidden-column @pagination-change="query">
+      <smart-grid-column>
         <template scope="props">
           <span>{{props.row.name}}</span>
           <span>{{props.row.sex}}</span>
           <span>{{props.row.age}}</span>
           <span>{{title}}</span>
           <span>{{props.rowIndex}}{{props.cellIndex}}</span>
-          </template>
+        </template>
       </smart-grid-column>
       <div slot="empty">没有数据...</div>
     </smart-grid>
-    <button type="button" @click="handleReload">reload</button>
-    <button type="button" @click="handleCheckedRows">checked rows</button>
-
   </div>
 </template>
 
@@ -45,7 +20,6 @@ import Vue from 'vue'
 export default {
   data() {
     return {
-      title: 'ABC',
       loading: false,
       data: {
         content: [{
@@ -112,50 +86,6 @@ export default {
     }
   },
   methods: {
-    handleReload() {
-      this.eventHub.$emit('reload')
-    },
-    reload(params) {
-      console.log('reload', params)
-    },
-    handleSizeChange(size) {
-      // console.log(size)
-    },
-    handlePageChange(page) {
-      // console.log(page)
-    },
-    query(params) {
-      console.log('query', params)
-    },
-    handleAllSelect(select) {
-      console.log(select)
-    },
-    handleSelect(row, select) {
-      console.log(row, select)
-    },
-    handleDblClick(row) {
-      console.log('dblclick', row)
-    },
-    handleClick(row) {
-      console.log('click', row)
-    },
-    handleSortChange(params) {
-      console.log('sort', params)
-    },
-    handleCheckedRows() {
-      console.log(this.$refs.grid.getCheckedRows())
-    }
   }
 }
 </script>
-
-<style lang="less" scoped>
-#app span {
-  background-color: #ddd;
-}
-#app .smart-grid {
-  td {
-    background-color: #f33!important;
-  }
-}
-</style>

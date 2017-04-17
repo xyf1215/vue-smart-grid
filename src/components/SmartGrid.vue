@@ -1,5 +1,5 @@
 <template>
-  <div class="smart-grid" :class="{[border]: true, loading, hoverable, selectable, multiple}">
+  <div class="smart-grid" :class="{[border]: true, loading, hoverable, selectable, multiple, inline: inlineMode}">
     <div class="hidden">
       <slot></slot>
     </div>
@@ -12,7 +12,6 @@
               <span class="checkbox-wrap" :class="{checked: allChecked}" @click="handleAllCheck"></span>
             </label>
           </th>
-          <th v-if="timeline" class="timeline"></th>
           <th v-for="header in headers"
             v-if="!header.hidden"
             :style="header.style"
@@ -29,6 +28,7 @@
           :key="seq ? row.rowData[seq] : rowIndex"
           @click="handleRowCheck(row, true)"
           :class="{checked: row.$checked}"
+          :style="{width: inlineWidth}"
           @dblclick="handleDblClick(row)">
           <td v-if="selectable && multiple" class="checkbox-cell">
             <label class="grid-checkbox">
@@ -37,7 +37,6 @@
                 @click.stop="handleRowCheck(row)"></span>
             </label>
           </td>
-          <td v-if="timeline" class="timeline"></td>
           <td v-for="(cell, cellIndex) in row.cells" v-if="!cell.hidden" :style="cell.style">
             <smart-grid-cell
               :row-index="rowIndex"
@@ -98,10 +97,6 @@ export default {
       type: String,
       default: 'xy'
     },
-    timeline: {
-      type: Boolean,
-      default: false
-    },
     loading: {
       type: Boolean,
       default: false
@@ -114,6 +109,10 @@ export default {
       type: Number,
       default: 100
     },
+    inlineRows: {
+      type: Number,
+      default: 0
+    },
     seq: String,
     eventHub: Object,
     showPages: Number,
@@ -122,6 +121,8 @@ export default {
   data() {
     return {
       pageable: false,
+      inlineMode: !!this.inlineRows,
+      inlineWidth: this.inlineRows ? (100 / this.inlineRows + '%') : '',
       headers: [],
       innerData: [],
       cellSize: 0,
@@ -232,9 +233,6 @@ export default {
       if (this.selectable && this.multiple) {
         cellSize++
       }
-      if (this.timeline) {
-        cellSize++
-      }
       this.cellSize = cellSize
     },
     handleShowMore() {
@@ -303,6 +301,17 @@ export default {
     transition: all .3s;
     background-color: #f5f4f1;
   }
+  &.inline {
+    tbody {
+      tr {
+        float: left;
+        padding: 10px;
+        td {
+          display: block;
+        }
+      }
+    }
+  }
   &.none {
     td, th {
       border: none!important;
@@ -331,10 +340,6 @@ export default {
   th, td {
     padding: 8px 12px;
     &.checkbox-cell {
-      width: 30px;
-      text-align: center;
-    }
-    &.timeline {
       width: 30px;
       text-align: center;
     }
@@ -375,16 +380,8 @@ export default {
     }
   }
   tr {
-    &:first-child td {
-      &.timeline::before {
-        top: 50%;
-      }
-    }
     &:last-child td {
       border-bottom: 1px solid #f2f1ec;
-      &.timeline::before {
-        bottom: 50%;
-      }
     }
   }
   td {
@@ -400,32 +397,6 @@ export default {
     &.show-more {
       text-align: center;
       cursor: pointer;
-    }
-    &.timeline {
-      position: relative;
-      &::before, &::after {
-        content: ' ';
-        position: absolute;
-        display: inline-block;
-      }
-      &::before {
-        top: 0;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-1.5px);
-        width: 3px;
-        background-color: #4db5e6;
-      }
-      &::after {
-        top: 50%;
-        left: 50%;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        transform: translate(-9px, -9px);
-        border: 1px solid #fff;
-        background-color: #4db5e6;
-      }
     }
   }
   .layer {

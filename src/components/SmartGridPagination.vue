@@ -172,6 +172,7 @@ export default {
     text-align: center;
     margin: 0 5px;
     outline: 0;
+    border-radius: 4px;
   }
   .total {
     color: #f33;
