@@ -1,5 +1,6 @@
 <script>
 export default {
+  name: 'smart-grid-column',
   props: {
     label: String,
     code: String,

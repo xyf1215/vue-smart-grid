@@ -29,8 +29,22 @@
           <span>{{props.row.age}}</span>
           <span>{{title}}</span>
           <span>{{props.rowIndex}}{{props.cellIndex}}</span>
-          </template>
+        </template>
       </smart-grid-column>
+      
+      <smart-grid-pagination>
+        <template scope="props">
+            <div class="smart-grid-pagination clearfix">
+            {{props}}
+            ...这个地方自定义翻页组件
+              <div class="pull-left">
+                共<span class="total">{{props.totalElements}}</span>条数据，每页显示
+                <select class="form-control" v-model="props.size" @change="props.handleSizeChange">
+                </select>条记录
+              </div>
+            </div>
+        </template>
+      </smart-grid-pagination>
       <div slot="empty">没有数据...</div>
     </smart-grid>
     <button type="button" @click="handleReload">reload</button>
@@ -55,6 +69,156 @@ export default {
           clazz: {
             id: 1,
             name: '三班'
+          }
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
+          }
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
+          }
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
+          }
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
+          }
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
+          }
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
+          }
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
+          }
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
+          }
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
+          }
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
+          }
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
+          }
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
+          }
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
+          }
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
+          }
+        },
+        {
+          name: '李四',
+          sex: '女',
+          age: 23,
+          type: 2,
+          clazz: {
+            id: 2,
+            name: '四班'
           }
         },
         {
@@ -98,7 +262,7 @@ export default {
           }
         }],
         totalElements: 11,
-        totalPages: 1,
+        totalPages: 2,
         last: true,
         number: 0,
         size: 20,

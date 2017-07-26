@@ -45,11 +45,11 @@
               :code="cell.code"
               :label="cell.label"
               :valueset="cell.valueset"
-              :default-slot-fn="cell.defaultSlotFn"></smart-grid-cell>
+              :template-slot-fn="cell.defaultSlotFn"></smart-grid-cell>
           </td>
         </tr>
         <tr v-if="innerData.length >= showRows">
-          <td :colspan="cellSize" @click="handleShowMore" class="show-more">{{showAllMore ? '收起更多' : '显示更多'}}</td>
+          <td :colspan="cellSize" @click="handleShowMore" class="show-more">{{showAllMore ? '↑' : '↓'}}more</td>
         </tr>
         <tr v-if="cellSize && empty">
           <td :colspan="cellSize"><slot name="empty"></slot></td>
@@ -57,6 +57,8 @@
       </tbody>
     </table>
     <smart-grid-pagination v-if="pageable"
+      :custom-template="false"
+      :template-slot-fn="pagination.defaultSlotFn"
       :pagination="data"
       :event-hub="eventHub"
       :inner-event-hub="innerEventHub"
@@ -79,6 +81,7 @@ import {config} from './index'
 import SmartGridCell from './SmartGridCell'
 import SmartGridPagination from './SmartGridPagination'
 export default {
+  name: 'smart-grid',
   props: {
     data: [Object, Array],
     hoverable: {
@@ -113,6 +116,10 @@ export default {
       type: Number,
       default: 0
     },
+    i18n: {
+      type: String,
+      default: 'zh-Hans'
+    },
     seq: String,
     eventHub: Object,
     showPages: Number,
@@ -124,6 +131,9 @@ export default {
       inlineMode: !!this.inlineRows,
       inlineWidth: this.inlineRows ? (100 / this.inlineRows + '%') : '',
       headers: [],
+      pagination: {
+        defaultSlotFn: null
+      },
       innerData: [],
       cellSize: 0,
       empty: false,
@@ -201,7 +211,14 @@ export default {
         style: this.extractHeaderStyle(header),
         defaultSlotFn: header.$scopedSlots ? header.$scopedSlots.default : null
       })
+      header.$destroy()
       this.calcExpandCellSize()
+    },
+    addCustomPagination(pagination) {
+      this.pagination = {
+        defaultSlotFn: pagination.$scopedSlots ? pagination.$scopedSlots.default : null
+      }
+      pagination.$destroy()
     },
     setHeaderHidden(header, hidden = false) {
       const {code} = header

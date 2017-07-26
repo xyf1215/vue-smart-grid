@@ -25,3 +25,55 @@
   padding: 0;
   list-style: none;
 }
+
+
+.smart-grid-pagination {
+  font-size: 12px;
+  margin-top: 10px;
+  select {
+    padding: 3px 6px;
+    text-align: center;
+    margin: 0 5px;
+    outline: 0;
+    border-radius: 4px;
+  }
+  .total {
+    color: #f33;
+    padding: 0 5px;
+  }
+  .pages {
+    display: inline-block;
+    li {
+      display: inline-block;
+      margin: 2px;
+      button {
+        outline: 0;
+        padding: 0;
+        cursor: pointer;
+        display: inline-block;
+        border: 1px solid #e5e5e5;
+        background-color: #fafafa;
+        width: 22px;
+        height: 22px;
+        line-height: 22px;
+        text-align: center;
+        font-size: 14px;
+        color: #666;
+        transition: all .3s;
+        &[disabled] {
+          opacity: .6;
+          cursor: not-allowed;
+        }
+        &:hover:not([disabled]) {
+          border-color: #f24f44;
+          color: #f24f44;
+        }
+        &.active {
+          border-color: #f24f44!important;
+          background-color: #f48565!important;
+          color: #fff!important;
+        }
+      }
+    }
+  }
+}

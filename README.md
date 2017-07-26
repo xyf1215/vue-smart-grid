@@ -1,7 +1,7 @@
 # vue-smart-grid
 
 > 基于Vue2开发的表格组件
-
+Custom Pagination beta
 ## 使用
 ``````
 import VueSmartGrid from 'vue-smart-grid'

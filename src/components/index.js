@@ -1,5 +1,6 @@
 import SmartGrid from './SmartGrid'
 import SmartGridColumn from './SmartGridColumn'
+import SmartGridPagination from './SmartGridPagination'
 
 export let config = {
   dataNode: 'content',
@@ -13,8 +14,10 @@ const install = function(Vue, options) {
   if (install.installed) {
     return
   }
-  Vue.component('smart-grid', SmartGrid)
-  Vue.component('smart-grid-column', SmartGridColumn)
+  Vue.component(SmartGrid.name, SmartGrid)
+  Vue.component(SmartGridColumn.name, SmartGridColumn)
+  Vue.component(SmartGridPagination.name, SmartGridPagination)
+
   if (options) {
     config = Object.assign({}, config, options)
   }

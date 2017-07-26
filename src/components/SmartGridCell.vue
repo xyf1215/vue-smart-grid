@@ -2,6 +2,7 @@
 import {getObjDeepVal, isEmptyObject} from 'libs/lang'
 
 export default {
+  name: 'smart-grid-cell',
   functional: true,
   props: {
     label: String,
@@ -20,12 +21,12 @@ export default {
     },
     rowIndex: Number,
     cellIndex: Number,
-    defaultSlotFn: Function
+    templateSlotFn: Function
   },
   render(h, context) {
-    let $cell = null
-    if (context.props.defaultSlotFn) {
-      $cell = context.props.defaultSlotFn({
+    let $template = null
+    if (context.props.templateSlotFn) {
+      $template = context.props.templateSlotFn({
         row: {...context.props.rowData},
         rawRow: context.props.rowData,
         valueset: context.props.valueset,
@@ -37,9 +38,9 @@ export default {
       if (!isEmptyObject(context.props.valueset)) {
         rowVal = context.props.valueset[rowVal]
       }
-      $cell = (<span>{rowVal}</span>)
+      $template = (<span>{rowVal}</span>)
     }
-    return (<div>{$cell}</div>)
+    return (<div>{$template}</div>)
   }
 }
 </script>

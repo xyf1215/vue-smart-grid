@@ -1,28 +1,16 @@
-<template>
-  <div class="smart-grid-pagination clearfix">
-    <div class="pull-left">
-      共<span class="total">{{totalElements}}</span>条数据，每页显示
-      <select class="form-control" v-model="size" @change="handleSizeChange">
-        <option v-for="item in sizes" :value="item">{{item}}</option>
-      </select>条记录
-    </div>
-    <div v-show="pages.length" class="pull-right">
-      <ul class="pages list-unstyled">
-        <li><button type="button" :disabled="start === number" @click="handleNumberChange(0)"><strong>|&lt;</strong></button></li>
-        <li><button type="button" :disabled="start === number" @click="handleNumberChange(number - 1)"><strong>&lt;</strong></button></li>
-        <li v-for="page in pages"><button type="button" :disabled="page === number" :class="{active: page === number}" @click="handleNumberChange(page)">{{page + 1}}</button></li>
-        <li><button type="button" :disabled="end - 1 === number" @click="handleNumberChange(number + 1)"><strong>&gt;</strong></button></li>
-        <li><button type="button" :disabled="end - 1 === number" @click="handleNumberChange(totalPages - 1)"><strong>&gt;|</strong></button></li>
-      </ul>
-    </div>
-  </div>
-</template>
+
 
 <script>
 import {isEmptyObject, isObject} from 'libs/lang'
 import {config} from './index'
 export default {
+  name: 'smart-grid-pagination',
   props: {
+    customTemplate: {
+      type: Boolean,
+      default: true
+    },
+    templateSlotFn: Function,
     pagination: {
       type: Object,
       default() {
@@ -73,9 +61,46 @@ export default {
     this.innerEventHub.on && this.innerEventHub.on('sort-change', this.handleSortChange)
   },
   mounted() {
-    this.initData()
+    if (this.customTemplate) {
+      this.$parent.addCustomPagination(this)
+    } else {
+      this.initData()
+    }
   },
   methods: {
+    createDefaultTemplate() {
+      let $pages = null
+      if (this.pages.length) {
+        $pages = (
+          <div class="pull-right">
+            <ul class="pages list-unstyled">
+              <li><button type="button" disabled={this.start === this.number} on-click={() => this.handleNumberChange(0)}><strong>|&lt;</strong></button></li>
+              <li><button type="button" disabled={this.start === this.number} on-click={() => this.handleNumberChange(this.number - 1)}><strong>&lt;</strong></button></li>
+              {this.pages.map(page => (<li><button type="button" disabled={page === this.number} class={{active: page === this.number}} on-click={() => this.handleNumberChange(page)}>{page + 1}</button></li>))}
+              <li><button type="button" disabled={this.end - 1 === this.number} on-click={() => this.handleNumberChange(this.number + 1)}><strong>&gt;</strong></button></li>
+              <li><button type="button" disabled={this.end - 1 === this.number} on-click={() => this.handleNumberChange(this.totalPages - 1)}><strong>&gt;|</strong></button></li>
+            </ul>
+          </div>
+        )
+      }
+      return (
+        <div class="smart-grid-pagination clearfix">
+          <div class="pull-left">
+            共<span class="total">{this.totalElements}</span>条数据，每页显示
+            <select class="form-control" on-change={e => {
+              this.sync('size', e.target.value)
+              this.handleSizeChange()
+            }}>
+              {this.sizes.map(item => (<option value={item}>{item}</option>))}
+            </select>条记录
+          </div>
+          {$pages}
+        </div>
+      )
+    },
+    sync(prop, value) {
+      this[prop] = value
+    },
     initData() {
       if (!this.pagination) {
         return
@@ -160,58 +185,25 @@ export default {
       const params = {size, number, page: number}
       this.$emit('reload', params)
     }
+  },
+  render(h) {
+    let $template = null
+    if (this.templateSlotFn) {
+      $template = this.templateSlotFn({
+        totalElements: this.totalElements,
+        size: this.size,
+        sizes: this.sizes,
+        number: this.number,
+        start: this.start,
+        end: this.end,
+        page: this.page,
+        handleSizeChange: this.handleSizeChange,
+        handleNumberChange: this.handleNumberChange
+      })
+    } else {
+      $template = this.createDefaultTemplate()
+    }
+    return (<div>{$template}</div>)
   }
 }
 </script>
-<style lang="less">
-.smart-grid-pagination {
-  font-size: 12px;
-  margin-top: 10px;
-  select {
-    padding: 3px 6px;
-    text-align: center;
-    margin: 0 5px;
-    outline: 0;
-    border-radius: 4px;
-  }
-  .total {
-    color: #f33;
-    padding: 0 5px;
-  }
-  .pages {
-    display: inline-block;
-    li {
-      display: inline-block;
-      margin: 2px;
-      button {
-        outline: 0;
-        padding: 0;
-        cursor: pointer;
-        display: inline-block;
-        border: 1px solid #e5e5e5;
-        background-color: #fafafa;
-        width: 22px;
-        height: 22px;
-        line-height: 22px;
-        text-align: center;
-        font-size: 14px;
-        color: #666;
-        transition: all .3s;
-        &[disabled] {
-          opacity: .6;
-          cursor: not-allowed;
-        }
-        &:hover:not([disabled]) {
-          border-color: #f24f44;
-          color: #f24f44;
-        }
-        &.active {
-          border-color: #f24f44!important;
-          background-color: #f48565!important;
-          color: #fff!important;
-        }
-      }
-    }
-  }
-}
-</style>

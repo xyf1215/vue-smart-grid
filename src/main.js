@@ -2,7 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import VueSmartGrid from './package'
-import App from './App'
+import App from './App0'
 Vue.use(VueSmartGrid, {dataNode: 'content'})
 /* eslint-disable no-new */
 new Vue({
