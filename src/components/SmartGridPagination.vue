@@ -87,19 +87,13 @@ export default {
         <div class="smart-grid-pagination clearfix">
           <div class="pull-left">
             共<span class="total">{this.totalElements}</span>条数据，每页显示
-            <select class="form-control" on-change={e => {
-              this.sync('size', e.target.value)
-              this.handleSizeChange()
-            }}>
+            <select class="form-control" on-change={e => this.handleSizeChange(e)}>
               {this.sizes.map(item => (<option value={item}>{item}</option>))}
             </select>条记录
           </div>
           {$pages}
         </div>
       )
-    },
-    sync(prop, value) {
-      this[prop] = value
     },
     initData() {
       if (!this.pagination) {
@@ -151,7 +145,8 @@ export default {
         start++
       }
     },
-    handleSizeChange() {
+    handleSizeChange(e) {
+      this.size = parseInt(e.target.value, 10)
       const {size, number} = config
       const newSize = parseInt(this.size, 10)
       this.size = this.pagination[size] = newSize
@@ -196,7 +191,7 @@ export default {
         number: this.number,
         start: this.start,
         end: this.end,
-        page: this.page,
+        pages: this.pages,
         handleSizeChange: this.handleSizeChange,
         handleNumberChange: this.handleNumberChange
       })
