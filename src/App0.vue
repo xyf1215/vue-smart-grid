@@ -31,28 +31,11 @@
           <span>{{props.rowIndex}}{{props.cellIndex}}</span>
         </template>
       </smart-grid-column>
-      
+
       <smart-grid-pagination>
         <template scope="props">
-            <div class="smart-grid-pagination clearfix">
-            {{props}}
-            <div class="pull-left">
-              共<span class="total">{{props.totalElements}}</span>条数据，每页显示
-              <select class="form-control" @change="props.handleSizeChange">
-                <option v-for="item in props.sizes" :value="item">{{item}}</option>
-              </select>条记录
-            </div>
-            <div v-show="props.pages.length" class="pull-right">
-              <ul class="pages list-unstyled">
-                <li><button type="button" :disabled="props.start === props.number" @click="props.handleNumberChange(0)"><strong>|&lt;</strong></button></li>
-                <li><button type="button" :disabled="props.start === props.number" @click="props.handleNumberChange(number - 1)"><strong>&lt;</strong></button></li>
-                <li v-for="page in props.pages"><button type="button" :disabled="page === props.number" :class="{active: page === props.number}" @click="props.handleNumberChange(page)">{{page + 1}}</button></li>
-                <li><button type="button" :disabled="props.end - 1 === props.number" @click="props.handleNumberChange(props.number + 1)"><strong>&gt;</strong></button></li>
-                <li><button type="button" :disabled="props.end - 1 === props.number" @click="props.handleNumberChange(props.totalPages - 1)"><strong>&gt;|</strong></button></li>
-              </ul>
-            </div>
-          </div>
-      </template>
+          <Page :handler="props"/>
+        </template>
       </smart-grid-pagination>
       <div slot="empty">没有数据...</div>
     </smart-grid>
@@ -64,6 +47,8 @@
 
 <script>
 import Vue from 'vue'
+import Page from './Page'
+
 export default {
   data() {
     return {
@@ -167,7 +152,8 @@ export default {
     handleCheckedRows() {
       console.log(this.$refs.grid.getCheckedRows())
     }
-  }
+  },
+  components: {Page}
 }
 </script>
 
