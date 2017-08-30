@@ -192,6 +192,7 @@ export default {
         start: this.start,
         end: this.end,
         pages: this.pages,
+        totalPages: this.totalPages,
         handleSizeChange: this.handleSizeChange,
         handleNumberChange: this.handleNumberChange
       })
