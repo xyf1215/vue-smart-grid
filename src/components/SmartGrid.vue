@@ -57,8 +57,10 @@
       </tbody>
     </table>
     <smart-grid-pagination v-if="pageable"
+      :config="config"
       :custom-template="false"
       :template-slot-fn="pagination.defaultSlotFn"
+      :start-number="startNumber"
       :pagination="data"
       :event-hub="eventHub"
       :inner-event-hub="innerEventHub"
@@ -116,9 +118,11 @@ export default {
       type: Number,
       default: 0
     },
-    i18n: {
-      type: String,
-      default: 'zh-Hans'
+    dataConfig: {
+      type: Object,
+      default() {
+        return {}
+      }
     },
     seq: String,
     eventHub: Object,
@@ -138,7 +142,8 @@ export default {
       cellSize: 0,
       empty: false,
       showAllMore: false,
-      innerEventHub: EventEmitter({})
+      innerEventHub: EventEmitter({}),
+      config: {...config, ...this.dataConfig}
     }
   },
   computed: {
@@ -159,7 +164,7 @@ export default {
       let innerData = this.data || []
       if (isObject(innerData)) {
         this.pageable = true
-        innerData = innerData[config.dataNode] || []
+        innerData = innerData[this.config.dataNode] || []
       }
       this.innerData = innerData.map(row => {
         return {

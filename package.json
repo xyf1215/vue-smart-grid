@@ -1,6 +1,6 @@
 {
   "name": "vue-smart-grid",
-  "version": "1.9.4",
+  "version": "1.9.5",
   "main": "dist/vue-smart-grid.js",
   "description": "基于Vue2开发的表格组件",
   "author": "xyf1215 <yunfeng.xi@qq.com>",

@@ -1,7 +1,6 @@
 # vue-smart-grid
 
 > 基于Vue2开发的表格组件
-> Custom Pagination beta!!!
 ## 使用
 ``````
 import VueSmartGrid from 'vue-smart-grid'
@@ -9,7 +8,7 @@ import 'vue-smart-grid/dist/default.css'
 
 Vue.use(VueSmartGrid)
 ``````
-默认基于spring-data的分页参数，可以在install时传入options自定义
+默认基于spring-data的分页参数，可以在install时传入options自定义data-config
 ``````
 Vue.use(VueSmartGrid, {
   dataNode: 'content', // 分页时的存放数据数组的名称
@@ -21,6 +20,7 @@ Vue.use(VueSmartGrid, {
 ``````
 ## 例子
 ``````
+// App.vue
 <template>
 <div id="app">
   <smart-grid
@@ -32,6 +32,10 @@ Vue.use(VueSmartGrid, {
   :show-pages="5"
   :loading="loading"
   :sizes="[10, 20, 50, 60]"
+  :data-config= "{
+  dataNode: 'content1',
+  size: 'size'
+} "
   :show-rows="2"
   @pagination-change="query"
   @size-change="handleSizeChange"
@@ -54,27 +58,11 @@ Vue.use(VueSmartGrid, {
           <span>{{props.rowIndex}}{{props.cellIndex}}</span>
         </template>
       </smart-grid-column>
+
       <smart-grid-pagination>
         <template scope="props">
-            <div class="smart-grid-pagination clearfix">
-            {{props}}
-            <div class="pull-left">
-              共<span class="total">{{props.totalElements}}</span>条数据，每页显示
-              <select class="form-control" @change="props.handleSizeChange">
-                <option v-for="item in props.sizes" :value="item">{{item}}</option>
-              </select>条记录
-            </div>
-            <div v-show="props.pages.length" class="pull-right">
-              <ul class="pages list-unstyled">
-                <li><button type="button" :disabled="props.start === props.number" @click="props.handleNumberChange(0)"><strong>|&lt;</strong></button></li>
-                <li><button type="button" :disabled="props.start === props.number" @click="props.handleNumberChange(number - 1)"><strong>&lt;</strong></button></li>
-                <li v-for="page in props.pages"><button type="button" :disabled="page === props.number" :class="{active: page === props.number}" @click="props.handleNumberChange(page)">{{page + 1}}</button></li>
-                <li><button type="button" :disabled="props.end - 1 === props.number" @click="props.handleNumberChange(props.number + 1)"><strong>&gt;</strong></button></li>
-                <li><button type="button" :disabled="props.end - 1 === props.number" @click="props.handleNumberChange(props.totalPages - 1)"><strong>&gt;|</strong></button></li>
-              </ul>
-            </div>
-          </div>
-      </template>
+          <Page :handler="props"/>
+        </template>
       </smart-grid-pagination>
       <div slot="empty">没有数据...</div>
     </smart-grid>
@@ -86,6 +74,8 @@ Vue.use(VueSmartGrid, {
 
 <script>
 import Vue from 'vue'
+import Page from './Page'
+
 export default {
   data() {
     return {
@@ -189,9 +179,43 @@ export default {
     handleCheckedRows() {
       console.log(this.$refs.grid.getCheckedRows())
     }
+  },
+  components: {Page}
+}
+</script>
+
+// Page.vue
+<template>
+  <div>
+    <div class="smart-grid-pagination clearfix">
+    <div class="pull-left">
+      <span class="total">{{handler.totalElements}}</span>entries, 
+      show
+      <select class="form-control" @change="handler.handleSizeChange">
+        <option v-for="item in handler.sizes" :value="item">{{item}}</option>
+      </select> entries
+    </div>
+    <div v-show="handler.pages.length" class="pull-right">
+      <ul class="pages list-unstyled">
+        <li><button type="button" :disabled="handler.start === handler.number" @click="handler.handleNumberChange(0)"><strong>|&lt;</strong></button></li>
+        <li><button type="button" :disabled="handler.start === handler.number" @click="handler.handleNumberChange(number - 1)"><strong>&lt;</strong></button></li>
+        <li v-for="page in handler.pages"><button type="button" :disabled="page === handler.number" :class="{active: page === handler.number}" @click="handler.handleNumberChange(page)">{{page + 1}}</button></li>
+        <li><button type="button" :disabled="handler.end - 1 === handler.number" @click="handler.handleNumberChange(handler.number + 1)"><strong>&gt;</strong></button></li>
+        <li><button type="button" :disabled="handler.end - 1 === handler.number" @click="handler.handleNumberChange(handler.totalPages - 1)"><strong>&gt;|</strong></button></li>
+      </ul>
+    </div>
+  </div>
+</div>
+</template>
+
+<script>
+export default {
+  props: {
+    handler: Object
   }
 }
 </script>
+
 ``````
 
 ## Smart-grid API
@@ -221,6 +245,9 @@ data: {
 
 ### selectable:Boolean
 是否可选择，默认为true
+
+### data-config:Object
+数据节点的配置，会覆盖root的配置 
 
 ### seq:String
 用户提升性能，避免更少的渲染，一般为"id"

@@ -2,10 +2,15 @@
 
 <script>
 import {isEmptyObject, isObject} from 'libs/lang'
-import {config} from './index'
 export default {
   name: 'smart-grid-pagination',
   props: {
+    config: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
     customTemplate: {
       type: Boolean,
       default: true
@@ -106,7 +111,7 @@ export default {
       this.calcShowPages()
     },
     parseData() {
-      const {size, totalPages, totalElements, number} = config
+      const {size, totalPages, totalElements, number} = this.config
       this.size = this.pagination[size]
       this.totalPages = this.pagination[totalPages]
       this.totalElements = this.pagination[totalElements]
@@ -147,7 +152,7 @@ export default {
     },
     handleSizeChange(e) {
       this.size = parseInt(e.target.value, 10)
-      const {size, number} = config
+      const {size, number} = this.config
       const newSize = parseInt(this.size, 10)
       this.size = this.pagination[size] = newSize
       // size改变后将页数重置
@@ -156,7 +161,7 @@ export default {
       this.handlePaginationChange({size: newSize, number: this.number})
     },
     handleNumberChange(newNumber) {
-      const {number} = config
+      const {number} = this.config
       this.number = this.pagination[number] = newNumber
       this.$emit('page-change', newNumber)
       this.handlePaginationChange({size: this.size, number: newNumber})
