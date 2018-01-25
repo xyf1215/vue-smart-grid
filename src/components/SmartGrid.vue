@@ -15,9 +15,10 @@
           <th v-for="header in headers"
             v-if="!header.hidden"
             :style="header.style"
-            :class="{sort: header.sort, [header.sortDirection]: true}"
+            :class="{'img-sort': isExistsSortIcons && header.sort, sort: header.sort, [header.sortDirection]: true}"
             @click="handleSort(header)">
             {{header.label}}
+            <i v-if="isExistsSortIcons && header.sort" :class="sortIcons[header.sortDirection || 'sort']"></i>
             <span class="sort-place"></span>
           </th>
         </tr>
@@ -60,7 +61,6 @@
       :config="config"
       :custom-template="false"
       :template-slot-fn="pagination.defaultSlotFn"
-      :start-number="startNumber"
       :pagination="data"
       :event-hub="eventHub"
       :inner-event-hub="innerEventHub"
@@ -78,10 +78,11 @@
 <script>
 import EventEmitter from 'event-emitter'
 import '../assets/styles/main.less'
-import {isObject} from 'libs/lang'
+import {isObject, isEmptyObject} from 'libs/lang'
 import {config} from './index'
 import SmartGridCell from './SmartGridCell'
 import SmartGridPagination from './SmartGridPagination'
+
 export default {
   name: 'smart-grid',
   props: {
@@ -118,6 +119,16 @@ export default {
       type: Number,
       default: 0
     },
+    sortIcons: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+    defaultDescDirection: {
+      type: Boolean,
+      default: true
+    },
     dataConfig: {
       type: Object,
       default() {
@@ -149,6 +160,9 @@ export default {
   computed: {
     allChecked() {
       return this.innerData.length && this.innerData.every(({$checked}) => $checked)
+    },
+    isExistsSortIcons() {
+      return !isEmptyObject(this.sortIcons)
     }
   },
   created() {
@@ -267,7 +281,7 @@ export default {
       this.headers.forEach(item => {
         if (item.sort) {
           if (header.code === item.code) {
-            header.sortDirection = header.sortDirection === '' ? 'desc' : header.sortDirection === 'desc' ? 'asc' : 'desc'
+            header.sortDirection = header.sortDirection === '' ? (this.defaultDescDirection ? 'desc' : 'asc') : header.sortDirection === 'desc' ? 'asc' : 'desc'
           } else {
             item.sortDirection = ''
           }
@@ -300,6 +314,11 @@ export default {
     },
     getCheckedRows() {
       return this.innerData.filter(({$checked}) => $checked).map(({rowData}) => rowData)
+    },
+    resetSortStatus() {
+      this.headers.forEach(item => {
+        item.sortDirection = ''
+      })
     }
   },
   components: {
@@ -384,20 +403,22 @@ export default {
       &.asc, &.desc {
         background-color: #e7f6fd;
       }
-      &.asc .sort-place {
-        background: url(../assets/images/asc.png) no-repeat center center;
-      }
-      &.desc .sort-place {
-        background: url(../assets/images/desc.png) no-repeat center center;
-      }
-      .sort-place {
-        display: inline-block;
-        position: relative;
-        top: 2px;
-        width: 14px;
-        height: 14px;
-        background: url(../assets/images/sort.png) no-repeat center center;
-        transition: all .3s;
+      &:not(.img-sort) {
+        &.asc .sort-place {
+         background: url(../assets/images/asc.png) no-repeat center center;
+        }
+        &.desc .sort-place {
+          background: url(../assets/images/desc.png) no-repeat center center;
+        }
+        .sort-place {
+          display: inline-block;
+          position: relative;
+          top: 2px;
+          width: 14px;
+          height: 14px;
+          background: url(../assets/images/sort.png) no-repeat center center;
+          transition: all .3s;
+        }
       }
     }
   }

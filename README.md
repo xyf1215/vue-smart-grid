@@ -33,9 +33,14 @@ Vue.use(VueSmartGrid, {
   :loading="loading"
   :sizes="[10, 20, 50, 60]"
   :data-config= "{
-  dataNode: 'content1',
-  size: 'size'
-} "
+    dataNode: 'content1',
+    size: 'size'
+  }"
+  :sort-icons="{
+    sort: 'sort dd',
+    asc: 'sort-asc sort',
+    desc: 'sort-desc'
+  }"
   :show-rows="2"
   @pagination-change="query"
   @size-change="handleSizeChange"
@@ -68,7 +73,7 @@ Vue.use(VueSmartGrid, {
     </smart-grid>
     <button type="button" @click="handleReload">reload</button>
     <button type="button" @click="handleCheckedRows">checked rows</button>
-
+    <button type="button" @click="handleResetSortStatus">reset sort status</button>
   </div>
 </template>
 
@@ -178,6 +183,9 @@ export default {
     },
     handleCheckedRows() {
       console.log(this.$refs.grid.getCheckedRows())
+    },
+    handleResetSortStatus() {
+      this.$refs.grid.resetSortStatus()
     }
   },
   components: {Page}
@@ -267,6 +275,9 @@ data: {
 ### event-hub:Vue
 触发vue-smart-gird事件时使用
 
+### defaultDescDirection
+默认第一次触发排序的顺序是desc
+
 ### border:String
 表格样式，默认'xy'，可取值：'xy','x','y','none'
 'xy':x与y都会有边栏
@@ -336,3 +347,6 @@ x与y同理
 ## 方法
 ### getCheckedRows
 获取当前选中的行
+
+### resetSortStatus
+重设排序为初始状态

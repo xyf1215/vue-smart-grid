@@ -10,10 +10,12 @@
   :loading="loading"
   :sizes="[10, 20, 50, 60]"
   :data-config= "{
-  dataNode: 'content1',
-  size: 'size'
-} "
+    dataNode: 'content1',
+    size: 'size'
+  }"
+  :sort-icons="{sort: 'fa fa-sort', asc: 'fa fa-sort fa-sort-up', desc: 'fa fa-sort fa-sort-down'}"
   :show-rows="2"
+  :default-desc-direction="false"
   @pagination-change="query"
   @size-change="handleSizeChange"
   @page-change="handlePageChange"
@@ -45,7 +47,7 @@
     </smart-grid>
     <button type="button" @click="handleReload">reload</button>
     <button type="button" @click="handleCheckedRows">checked rows</button>
-
+    <button type="button" @click="handleResetSortStatus">reset sort status</button>
   </div>
 </template>
 
@@ -155,19 +157,11 @@ export default {
     },
     handleCheckedRows() {
       console.log(this.$refs.grid.getCheckedRows())
+    },
+    handleResetSortStatus() {
+      this.$refs.grid.resetSortStatus()
     }
   },
   components: {Page}
 }
 </script>
-
-<style lang="less" scoped>
-#app span {
-  background-color: #ddd;
-}
-#app .smart-grid {
-  td {
-    background-color: #f33!important;
-  }
-}
-</style>
