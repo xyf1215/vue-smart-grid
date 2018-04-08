@@ -49,7 +49,7 @@
               :template-slot-fn="cell.defaultSlotFn"></smart-grid-cell>
           </td>
         </tr>
-        <tr v-if="innerData.length >= showRows">
+        <tr v-if="innerData.length > showRows">
           <td :colspan="cellSize" @click="handleShowMore" class="show-more">{{showAllMore ? '↑' : '↓'}}more</td>
         </tr>
         <tr v-if="cellSize && empty">

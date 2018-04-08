@@ -10,11 +10,11 @@
   :loading="loading"
   :sizes="[10, 20, 50, 60]"
   :data-config= "{
-    dataNode: 'content1',
+    dataNode: 'content',
     size: 'size'
   }"
   :sort-icons="{sort: 'fa fa-sort', asc: 'fa fa-sort fa-sort-up', desc: 'fa fa-sort fa-sort-down'}"
-  :show-rows="2"
+  :show-rows="4"
   :default-desc-direction="false"
   @pagination-change="query"
   @size-change="handleSizeChange"
