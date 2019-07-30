@@ -1,6 +1,6 @@
 {
   "name": "vue-smart-grid-uad",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/vue-smart-grid.js",
   "description": "基于Vue2开发的表格组件",
   "author": "yupeng <yupeng19860601@sina.com>",
@@ -25,6 +25,8 @@
   "dependencies": {
     "babel-helper-vue-jsx-merge-props": "^2.0.2",
     "event-emitter": "^0.3.4",
+    "deepmerge": "^1.2.0",
+    "vue-i18n": "^7.0.3",
     "vue": "^2.1.0"
   },
   "devDependencies": {

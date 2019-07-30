@@ -6,9 +6,8 @@
   seq="name"
   @reload="reload"
   :event-hub="eventHub"
-  :show-pages="5"
   :loading="loading"
-  :sizes="[10, 20, 50, 60]"
+  :sizes="[2, 20, 50, 60]"
   :data-config= "{
     dataNode: 'content',
     size: 'size'
@@ -38,11 +37,6 @@
         </template>
       </smart-grid-column>
 
-      <smart-grid-pagination>
-        <template scope="props">
-          <Page :handler="props"/>
-        </template>
-      </smart-grid-pagination>
       <div slot="empty">没有数据...</div>
     </smart-grid>
     <button type="button" @click="handleReload">reload</button>
@@ -115,7 +109,7 @@ export default {
         totalPages: 2,
         last: true,
         number: 0,
-        size: 20,
+        size: 2,
         sort: null,
         numberOfElements: 11,
         first: true
