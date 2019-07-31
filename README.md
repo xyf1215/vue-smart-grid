@@ -45,6 +45,19 @@ export const vsg = {
       total: '共 {total} 条'
     }
   }
+ export const vsg = {
+     pagination: {
+        pagesize: '/page',
+        total: 'Total {total}'
+     }
+   }
+   
+ export const vsg = {
+     pagination: {
+      pagesize: '/หน้า',
+      total: 'ทั้งหมด {total}'
+     }
+   }
 ``````
 ## 例子
 ``````
