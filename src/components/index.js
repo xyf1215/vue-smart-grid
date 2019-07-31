@@ -15,13 +15,12 @@ const install = function(Vue, options) {
   if (install.installed) {
     return
   }
-  locale.use(options.locale)
-  locale.i18n(options.i18n)
   Vue.component(SmartGrid.name, SmartGrid)
   Vue.component(SmartGridColumn.name, SmartGridColumn)
   Vue.component(SmartGridPagination.name, SmartGridPagination)
-
   if (options) {
+    locale.use(options.locale)
+    locale.i18n(options.i18n)
     config = Object.assign({}, config, options)
   }
 }
