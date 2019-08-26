@@ -6,15 +6,14 @@
   seq="name"
   @reload="reload"
   :event-hub="eventHub"
-  :show-pages="5"
   :loading="loading"
-  :sizes="[10, 20, 50, 60]"
+  :sizes="[2, 20, 50, 60]"
   :data-config= "{
-    dataNode: 'content1',
+    dataNode: 'content',
     size: 'size'
   }"
   :sort-icons="{sort: 'fa fa-sort', asc: 'fa fa-sort fa-sort-up', desc: 'fa fa-sort fa-sort-down'}"
-  :show-rows="2"
+  :show-rows="4"
   :default-desc-direction="false"
   @pagination-change="query"
   @size-change="handleSizeChange"
@@ -38,11 +37,6 @@
         </template>
       </smart-grid-column>
 
-      <smart-grid-pagination>
-        <template scope="props">
-          <Page :handler="props"/>
-        </template>
-      </smart-grid-pagination>
       <div slot="empty">没有数据...</div>
     </smart-grid>
     <button type="button" @click="handleReload">reload</button>
@@ -115,7 +109,7 @@ export default {
         totalPages: 2,
         last: true,
         number: 0,
-        size: 20,
+        size: 2,
         sort: null,
         numberOfElements: 11,
         first: true

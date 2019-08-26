@@ -1,9 +1,9 @@
 {
-  "name": "vue-smart-grid",
-  "version": "1.10.3",
+  "name": "vue-smart-grid-uad",
+  "version": "1.0.3",
   "main": "dist/vue-smart-grid.js",
   "description": "基于Vue2开发的表格组件",
-  "author": "xyf1215 <yunfeng.xi@qq.com>",
+  "author": "yupeng <yupeng19860601@sina.com>",
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
@@ -15,16 +15,18 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/xyf1215/vue-smart-grid"
+    "url": "https://github.com/yupeng86/vue-smart-grid"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/xyf1215/vue-smart-grid/issues"
+    "url": "https://github.com/yupeng86/vue-smart-grid/issues"
   },
-  "homepage": "https://github.com/xyf1215/vue-smart-grid#readme",
+  "homepage": "https://github.com/yupeng86/vue-smart-grid#readme",
   "dependencies": {
     "babel-helper-vue-jsx-merge-props": "^2.0.2",
     "event-emitter": "^0.3.4",
+    "deepmerge": "^1.2.0",
+    "vue-i18n": "^7.0.3",
     "vue": "^2.1.0"
   },
   "devDependencies": {

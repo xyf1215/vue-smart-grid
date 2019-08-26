@@ -2,6 +2,7 @@
 
 <script>
 import {isEmptyObject, isObject} from 'libs/lang'
+import Locale from '../mixins/locale'
 export default {
   name: 'smart-grid-pagination',
   props: {
@@ -50,6 +51,7 @@ export default {
       this.initData()
     }
   },
+  mixins: [Locale],
   data() {
     return {
       start: 0,
@@ -91,10 +93,10 @@ export default {
       return (
         <div class="smart-grid-pagination clearfix">
           <div class="pull-left">
-            共<span class="total">{this.totalElements}</span>条数据，每页显示
+            {this.t('vsg.pagination.total', {total: this.totalElements})}，
             <select class="form-control" on-change={e => this.handleSizeChange(e)}>
               {this.sizes.map(item => (<option value={item}>{item}</option>))}
-            </select>条记录
+            </select>{this.t('vsg.pagination.pagesize')}
           </div>
           {$pages}
         </div>

@@ -18,6 +18,47 @@ Vue.use(VueSmartGrid, {
   number: 'number' // 当前第几页，从0开始
 })
 ``````
+##vue-i18支持多语言切换
+``````
+``````
+默认语言中文，代码机构如下
+``````
+
+import VueI18n from 'vue-i18n'
+Vue.use(VueI18n)
+export const i18n = new VueI18n({
+  locale: 'en', // set locale
+  messages: { //自定义语言包
+   'en': require('./locale/lang/en.js'),
+   'th': require('./locale/lang/th.js'),
+   'cn': require('./locale/lang/zh-CN.js')
+  }
+})
+VueSmartGrid.i18n((key, value) => i18n.t(key, value))
+
+``````
+语言包结构
+``````
+export const vsg = {
+    pagination: {
+      pagesize: '条/页',
+      total: '共 {total} 条'
+    }
+  }
+ export const vsg = {
+     pagination: {
+        pagesize: '/page',
+        total: 'Total {total}'
+     }
+   }
+   
+ export const vsg = {
+     pagination: {
+      pagesize: '/หน้า',
+      total: 'ทั้งหมด {total}'
+     }
+   }
+``````
 ## 例子
 ``````
 // App.vue
